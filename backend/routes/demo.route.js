@@ -39,7 +39,7 @@ router.get("/settings", authenticateUser, async (req, res) => {
  * PUT /api/demo/settings
  * Toggle demo mode or adjust tolerance (Authenticated)
  */
-router.put("/settings", authenticateUser, async (req, res) => {
+router.put("/settings", authenticateUser, requireAdmin, async (req, res) => {
 	try {
 		const { enabled, toleranceKwh, demoInverterId } = req.body;
 		const adminName = req.account?.name || "admin";

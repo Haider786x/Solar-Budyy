@@ -2,7 +2,13 @@ const jwt = require("jsonwebtoken");
 const Account = require("../models/Account");
 const UserData = require("../models/data");
 
-const JWT_SECRET = process.env.JWT_SECRET || "solarbuddy_jwt_secret_key_2026_etmn100_minor_proj";
+if (!process.env.JWT_SECRET) {
+	require("dotenv").config({ path: require("path").join(__dirname, "../.env") });
+}
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+	throw new Error("FATAL: JWT_SECRET environment variable is missing in auth middleware.");
+}
 
 /**
  * Authenticate incoming Bearer token and attach fresh account & user context

@@ -333,18 +333,13 @@ async function callLocalOperationsEngine({ messages, toolsMap, userContext, site
 		text += `### Technical Reference: ${top.title} (${top.topic})\n\n`;
 		text += `${top.content}\n\n`;
 	} else if (!text) {
-		text = `I am SolarBuddy AI, your Solar Energy Operations Specialist. I can inspect authorized live telemetry, calculate performance differences, interpret SOIC alerts, analyze weather impacts, and explain technical solar engineering concepts.\n\n` +
-			`You can ask me questions like:\n` +
-			`- *"How much energy has my system generated today?"*\n` +
-			`- *"Why is my production lower than expected?"*\n` +
-			`- *"What is inverter clipping and does it harm my system?"*\n` +
-			`- *"Check my installation's active alerts and health status."*`;
+		text = `Hey! I'm Solis, your intelligent solar energy assistant.\n\nI can check your installation's live telemetry, investigate generation differences, review operational alerts, explain weather impacts, and answer photovoltaic engineering questions.\n\nHere are a few things you can ask:\n- *"How much energy have I generated today?"*\n- *"Why is my generation lower than expected?"*\n- *"Do I have any active alerts?"*\n- *"Explain my installation's performance ratio."*`;
 	}
 
 	return {
 		text,
 		provider: "local_operations_engine",
-		model: "SolarBuddy Deterministic Operations Agent v1.0",
+		model: "Solis Local Operations Engine v2.0",
 		toolExecutionSteps
 	};
 }

@@ -1,7 +1,14 @@
 const jwt = require("jsonwebtoken");
 const Account = require("../models/Account");
+const UserData = require("../models/data");
 
-const JWT_SECRET = process.env.JWT_SECRET || "solarbuddy_jwt_secret_key_2026_etmn100_minor_proj";
+if (!process.env.JWT_SECRET) {
+	require("dotenv").config({ path: require("path").join(__dirname, "../.env") });
+}
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+	throw new Error("FATAL: JWT_SECRET environment variable is missing.");
+}
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 
 const generateToken = (account) => {
@@ -88,35 +95,6 @@ exports.register = async (req, res) => {
 	}
 };
 
-const KNOWN_ADMIN_PASSWORDS = new Set([
-	"adminsolarbuddy2026!",
-	"admin",
-	"admin123",
-	"admin@123",
-	"admin123!",
-	"solarbuddy",
-	"solarbuddy2026",
-	"solarbuddy2026!",
-	"password",
-	"haider",
-	"haider123"
-]);
-
-const KNOWN_USER_PASSWORDS = new Set([
-	"usersolarbuddy2026!",
-	"user",
-	"user123",
-	"admin",
-	"admin123",
-	"solarbuddy",
-	"solarbuddy2026",
-	"solarbuddy2026!",
-	"haider",
-	"haider123",
-	"password",
-	"123456",
-	"lordxgrimx786"
-]);
 
 // POST /auth/login (Normal User Login)
 exports.login = async (req, res) => {
@@ -162,11 +140,7 @@ exports.login = async (req, res) => {
 			}
 		}
 
-		let isMatch = await account.comparePassword(password);
-		const normPass = String(password).trim().toLowerCase();
-		if (!isMatch && (KNOWN_USER_PASSWORDS.has(normPass) || KNOWN_ADMIN_PASSWORDS.has(normPass))) {
-			isMatch = true;
-		}
+		const isMatch = await account.comparePassword(password);
 
 		if (!isMatch) {
 			return res.status(401).json({
@@ -243,11 +217,7 @@ exports.adminLogin = async (req, res) => {
 			}
 		}
 
-		let isMatch = await account.comparePassword(password);
-		const normPass = String(password).trim().toLowerCase();
-		if (!isMatch && (KNOWN_ADMIN_PASSWORDS.has(normPass) || KNOWN_USER_PASSWORDS.has(normPass))) {
-			isMatch = true;
-		}
+		const isMatch = await account.comparePassword(password);
 
 		if (!isMatch) {
 			return res.status(401).json({

@@ -155,7 +155,7 @@ const LoginPage = () => {
 									Security Password
 								</label>
 								<span className="text-[10px] text-slate-400">
-									Default: <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700 font-bold">{activeTab === "admin" ? "admin" : "user"}</code>
+									Default: <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700 font-bold">{activeTab === "admin" ? "AdminSolarBuddy2026!" : "UserSolarBuddy2026!"}</code>
 								</span>
 							</div>
 							<div className="relative">
@@ -166,7 +166,7 @@ const LoginPage = () => {
 									value={password}
 									onChange={(e) => setPassword(e.target.value)}
 									className="w-full bg-white border border-slate-300 rounded-md pl-9 pr-3 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-									placeholder={activeTab === "admin" ? "Enter password (e.g. admin)" : "Enter password (e.g. user)"}
+									placeholder={activeTab === "admin" ? "Enter password (e.g. AdminSolarBuddy2026!)" : "Enter password (e.g. UserSolarBuddy2026!)"}
 								/>
 							</div>
 						</div>

@@ -336,7 +336,7 @@ const TopNav = () => {
 										Administrator Password
 									</label>
 									<span className="text-[10px] text-slate-400">
-										Default: <code className="bg-slate-800 text-blue-300 px-1 py-0.5 rounded font-bold">admin</code>
+										Default: <code className="bg-slate-800 text-blue-300 px-1 py-0.5 rounded font-bold">AdminSolarBuddy2026!</code>
 									</span>
 								</div>
 								<input
@@ -345,7 +345,7 @@ const TopNav = () => {
 									required
 									value={adminPasswordInput}
 									onChange={(e) => setAdminPasswordInput(e.target.value)}
-									placeholder="Enter password (e.g. admin)"
+									placeholder="Enter administrator password"
 									className="w-full bg-[#0F172A] border border-slate-600 focus:border-blue-500 rounded px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none"
 								/>
 							</div>

@@ -18,10 +18,18 @@ require("./services/db");
 
 const app = express();
 app.use(express.json());
+const allowedOrigins = process.env.FRONTEND_ORIGIN
+	? process.env.FRONTEND_ORIGIN.split(",").map(o => o.trim())
+	: ["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173"];
+
 app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "*");
+	const origin = req.headers.origin;
+	if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes("*")) {
+		res.header("Access-Control-Allow-Origin", origin || "*");
+	}
 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 	res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+	res.header("Access-Control-Allow-Credentials", "true");
 
 	if (req.method === "OPTIONS") {
 		return res.sendStatus(204);
