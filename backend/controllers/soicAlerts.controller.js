@@ -9,6 +9,8 @@ const { resolveAlert: engineResolveAlert, previewSiteEvaluation, evaluateAllSite
 const { getOperationalHealth: readOperationalHealth } = require("../services/pipelineTelemetryService");
 
 // --- UTILITIES ---
+const escapeRegex = (str) => (str ? str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") : "");
+
 const calculateHistoryMetrics = (history) => {
 	const total = history.length;
 	let open = 0, resolved = 0;
@@ -343,7 +345,7 @@ exports.getSiteAlertHistory = async (req, res) => {
 		const { siteName, startDate, endDate } = req.query;
 		if (!siteName) return res.status(400).json({ success: false, message: "siteName is required" });
 
-		const siteRegex = new RegExp(`^${siteName.trim()}$`, "i");
+		const siteRegex = new RegExp(`^${escapeRegex(siteName.trim())}$`, "i");
 		const userRecord = await UserData.findOne({ name: siteRegex, isDeleted: { $ne: true }, status: { $ne: "deleted" } }).lean();
 		let actualSiteName = null;
 
@@ -397,7 +399,7 @@ exports.generateReportPDF = async (req, res) => {
 		const { siteName, startDate, endDate } = req.query;
 		if (!siteName) return res.status(400).send("siteName required");
 
-		const siteRegex = new RegExp(`^${siteName.trim()}$`, "i");
+		const siteRegex = new RegExp(`^${escapeRegex(siteName.trim())}$`, "i");
 		const userRecord = await UserData.findOne({ name: siteRegex, isDeleted: { $ne: true }, status: { $ne: "deleted" } }).lean();
 		let actualSiteName = null;
 
@@ -506,7 +508,7 @@ exports.generateReportExcel = async (req, res) => {
 		const { siteName, startDate, endDate } = req.query;
 		if (!siteName) return res.status(400).send("siteName required");
 
-		const siteRegex = new RegExp(`^${siteName.trim()}$`, "i");
+		const siteRegex = new RegExp(`^${escapeRegex(siteName.trim())}$`, "i");
 		const userRecord = await UserData.findOne({ name: siteRegex, isDeleted: { $ne: true }, status: { $ne: "deleted" } }).lean();
 		let actualSiteName = null;
 

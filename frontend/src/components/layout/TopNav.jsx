@@ -10,7 +10,8 @@ import {
 	Plus,
 	Lock,
 	X,
-	ShieldAlert
+	ShieldAlert,
+	Menu
 } from "lucide-react";
 
 const TopNav = () => {
@@ -31,7 +32,13 @@ const TopNav = () => {
 	const { isDemoActive, demoSettings } = useDemo();
 
 	const [siteDropdownOpen, setSiteDropdownOpen] = useState(false);
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const siteDropdownRef = useRef(null);
+
+	// Close mobile menu on route change
+	useEffect(() => {
+		setMobileMenuOpen(false);
+	}, [location.pathname]);
 
 	// Admin authorization elevation modal
 	const [showAdminAuthModal, setShowAdminAuthModal] = useState(false);
@@ -266,6 +273,17 @@ const TopNav = () => {
 							>
 								<LogOut className="w-3.5 h-3.5" />
 							</button>
+
+							{/* Mobile Menu Toggle Button */}
+							<button
+								type="button"
+								onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+								className="lg:hidden text-slate-400 hover:text-white p-1.5 rounded-md hover:bg-[#1E293B] border border-transparent hover:border-slate-700/60 transition-colors"
+								title="Toggle navigation menu"
+								aria-label="Toggle navigation menu"
+							>
+								{mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+							</button>
 						</div>
 					) : (
 						<div className="flex items-center gap-2">
@@ -284,6 +302,29 @@ const TopNav = () => {
 						</div>
 					)}
 				</div>
+
+				{/* Mobile Collapsible Navigation Menu */}
+				{isAuthenticated && mobileMenuOpen && (
+					<nav className="lg:hidden border-t border-slate-800 py-2.5 px-1 space-y-1 animate-in slide-in-from-top-2 duration-150">
+						{navItems.map((item) => {
+							const isActive = location.pathname === item.to || (item.to === "/" && location.pathname === "/overview");
+							return (
+								<NavLink
+									key={item.label}
+									to={item.to}
+									onClick={() => setMobileMenuOpen(false)}
+									className={`block px-3 py-2 rounded-md text-xs tracking-normal transition-colors ${
+										isActive
+											? "bg-blue-600 text-white font-bold"
+											: "text-slate-300 hover:bg-[#141E33] hover:text-white font-medium"
+									}`}
+								>
+									{item.label}
+								</NavLink>
+							);
+						})}
+					</nav>
+				)}
 			</div>
 
 			{/* Admin Elevation Password Modal */}
