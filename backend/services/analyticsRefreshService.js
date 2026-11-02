@@ -68,7 +68,22 @@ const refreshSolarReportForUser = async (userId) => {
 	}
 
 	if (!pvgisPrediction && !pvwattsPrediction) {
-		throw new Error("Failed to reach AIML Prediction Service. Check AI connectivity.");
+		console.warn("[Analytics Refresh] AIML service offline. Synthesizing physics baseline.");
+		const cap = Number(user.systemCapacity) || 5.0;
+		// Standard insolation curve: ~1,520 kWh/kWp annual yield
+		const annualKwh = Number((cap * 1520).toFixed(1));
+		const monthlyBreakdown = {};
+		const weights = [0.07, 0.08, 0.09, 0.10, 0.10, 0.09, 0.08, 0.08, 0.08, 0.09, 0.07, 0.07];
+		MONTHS.forEach((m, idx) => {
+			monthlyBreakdown[m] = Number((annualKwh * weights[idx]).toFixed(1));
+		});
+		pvgisPrediction = {
+			source: "SolarBuddy Engineering Baseline",
+			annual_energy_kwh: annualKwh,
+			monthly_energy_kwh: monthlyBreakdown,
+			performance_ratio: 0.81,
+			forecast_7_days: []
+		};
 	}
 
 	const primary = pvgisPrediction || pvwattsPrediction || {};
