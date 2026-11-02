@@ -170,3 +170,43 @@ Following critical audit feedback, four key technical areas were hardened and ve
 - **Asset:** Verified high-resolution Solis logo (`solis-logo.png`, 1024x1024 px PNG).
 - **Placement:** Floating chat launcher (`SolisLauncherIcon`), modal header avatar, and assistant message avatars.
 - **Verification:** 12/12 Solis test suite passed (`test_solis_suite.js`), verifying tenant isolation, 6 backend tools, RAG knowledge retrieval, and prompt persona.
+
+---
+
+## 7. Safe Codebase Cleanup & Dead File Removal (Option A)
+
+Following full repository audit and explicit user confirmation (Option A), 17 genuinely dead, unreferenced files were safely removed:
+
+### Removed Files (17 files, ~442 kB reduction):
+- **Unused Assets (2):**
+  - `frontend/public/solar-farm-hero.jpg` (391.4 kB, unreferenced stock image)
+  - `frontend/public/favicon.svg` (4.8 kB, leftover default Vite boilerplate SVG)
+- **Orphaned Frontend Components (7):**
+  - `frontend/src/components/Forecast7DayTable.jsx` (orphan prototype)
+  - `frontend/src/components/auth/RouteGuards.jsx` (superseded by App.jsx inline guards)
+  - `frontend/src/components/SOIC/SiteDetailsDrawer.jsx` (abandoned SOIC prototype)
+  - `frontend/src/components/SOIC/SOICActiveAlerts.jsx` (abandoned SOIC prototype)
+  - `frontend/src/components/SOIC/SOICCriticalSites.jsx` (abandoned SOIC prototype)
+  - `frontend/src/components/SOIC/SOICLiveSites.jsx` (abandoned SOIC prototype)
+  - `frontend/src/components/SOIC/alertCopy.js` (copy dictionary for abandoned prototypes)
+- **Obsolete Archive Scripts (8):**
+  - `backend/archive/scripts/check_demo.js`
+  - `backend/archive/scripts/clean_and_keep_haider_only.js`
+  - `backend/archive/scripts/clean_and_setup_haider.js`
+  - `backend/archive/scripts/inspect_all.js`
+  - `backend/archive/scripts/inspect_predictions.js`
+  - `backend/archive/scripts/inspect_sites.js`
+  - `backend/archive/scripts/patch_frontend_pages.js`
+  - `backend/archive/scripts/seed_fleet_data.js`
+
+### Deliberately Retained Systems:
+- **Unrouted Legacy Pages & Subcomponents (20 files):** Retained under Rule 3 to preserve historical implementations without breaking imports.
+- **MongoDB Collections & Backups:** All models in `backend/models/` and all JSON snapshots in `backend/backups/`.
+- **Core UI Primitives:** `StatBlock.jsx`, `Toast.jsx`, `Skeleton.jsx`, etc.
+- **All Dependencies:** 0 packages removed (100% of frontend and backend packages are actively used).
+
+### Regression Results Post-Cleanup:
+- Frontend Production Build: **PASSED (856ms, 0 errors, 0 warnings)**
+- Demo Inverter Determinism: **9/9 PASSED (17.11 kWh, 1.42 variance)**
+- Solis AI Assistant Suite: **12/12 PASSED**
+- Multi-Tenant Authorization: **35/35 PASSED**
