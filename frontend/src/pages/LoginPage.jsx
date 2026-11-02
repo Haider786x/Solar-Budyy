@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Layout from "../components/layout/Layout";
+import Button from "../components/ui/Button";
 import { Sun, Mail, Lock, User, ShieldCheck, ArrowRight } from "lucide-react";
 
 const LoginPage = () => {
@@ -171,25 +172,16 @@ const LoginPage = () => {
 							</div>
 						</div>
 
-						<button
+						<Button
 							type="submit"
-							disabled={loading}
-							className="w-full bg-[#2563EB] hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors mt-2"
+							variant="primary"
+							size="md"
+							loading={loading}
+							className="w-full mt-2"
+							icon={ArrowRight}
 						>
-							{loading ? (
-								"Authenticating..."
-							) : activeTab === "admin" ? (
-								<>
-									Sign In to Fleet Console
-									<ArrowRight className="w-3.5 h-3.5 ml-1" />
-								</>
-							) : (
-								<>
-									Sign In to Site Portal
-									<ArrowRight className="w-3.5 h-3.5 ml-1" />
-								</>
-							)}
-						</button>
+							{activeTab === "admin" ? "Sign In to Fleet Console" : "Sign In to Site Portal"}
+						</Button>
 					</form>
 
 					{/* Register Link */}

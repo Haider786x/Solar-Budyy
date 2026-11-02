@@ -1,5 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
 import Layout from "../components/layout/Layout";
+import Card, { CardHeader } from "../components/ui/Card";
+import Badge from "../components/ui/Badge";
+import Button from "../components/ui/Button";
+import Modal from "../components/ui/Modal";
 import SiteLocationMap from "../components/SiteLocationMap";
 import MapPicker from "../components/MapPicker";
 import { useAuth, formatLocationString } from "../context/AuthContext";
@@ -7,7 +11,6 @@ import { useDemo } from "../context/DemoContext";
 import { fetchUserById, updateUser, triggerDailyPredictionByUserId } from "../services/api";
 import {
 	Sun,
-	Sparkles,
 	MapPin,
 	Edit,
 	CheckCircle2,
@@ -200,54 +203,54 @@ const SolarSystemPage = () => {
 
 				{/* 4 Top Spec Badges */}
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<span className="text-[11px] text-slate-400 font-medium block">Installed Capacity</span>
 						<div className="flex items-baseline gap-1 mt-1">
-							<span className="text-2xl font-black text-blue-600 tracking-tight">{cap}</span>
+							<span className="text-2xl font-black text-blue-600 tracking-tight font-tabular">{cap}</span>
 							<span className="text-xs font-bold text-slate-600">kWp Rated</span>
 						</div>
 						<span className="text-[11px] text-slate-500 mt-2 block">
 							{panels} Modules ({moduleWatts}W {site?.moduleType || "Mono PERC"})
 						</span>
-					</div>
+					</Card>
 
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<span className="text-[11px] text-slate-400 font-medium block">Roof Mounting Pitch</span>
 						<div className="flex items-baseline gap-1 mt-1">
-							<span className="text-2xl font-black text-slate-900 tracking-tight">{tilt}°</span>
+							<span className="text-2xl font-black text-slate-900 tracking-tight font-tabular">{tilt}°</span>
 							<span className="text-xs font-bold text-slate-600">Slope</span>
 						</div>
 						<span className="text-[11px] text-emerald-600 font-semibold mt-2 block">
 							Optimal for {site?.location?.latitude ? `${site.location.latitude}°N` : "26.8467°N"} latitude
 						</span>
-					</div>
+					</Card>
 
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<span className="text-[11px] text-slate-400 font-medium block">Panel Direction</span>
 						<div className="flex items-baseline gap-1 mt-1">
-							<span className="text-2xl font-black text-slate-900 tracking-tight">{azimuth}°</span>
+							<span className="text-2xl font-black text-slate-900 tracking-tight font-tabular">{azimuth}°</span>
 							<span className="text-xs font-bold text-slate-600">True South</span>
 						</div>
 						<span className="text-[11px] text-slate-500 mt-2 block">
 							180° orientation for maximum solar capture
 						</span>
-					</div>
+					</Card>
 
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<span className="text-[11px] text-slate-400 font-medium block">Inverter Efficiency</span>
 						<div className="flex items-baseline gap-1 mt-1">
-							<span className="text-2xl font-black text-emerald-600 tracking-tight">
+							<span className="text-2xl font-black text-emerald-600 tracking-tight font-tabular">
 								{site?.inv_efficiency || 98}%
 							</span>
 							<span className="text-xs font-bold text-slate-600">Euro η</span>
 						</div>
 						<span className="text-[11px] text-slate-500 mt-2 block">Dual Tracking String Inverter</span>
-					</div>
+					</Card>
 				</div>
 
 				{/* Mid 2 Panels: Sun Trajectory Arc & Compass Bearing */}
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-					<div className="lg:col-span-7 bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="lg:col-span-7 p-4">
 						<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2">
 							<div>
 								<h2 className="text-xs font-bold text-slate-900">Sun Trajectory &amp; Rooftop Alignment</h2>
@@ -330,18 +333,18 @@ const SolarSystemPage = () => {
 								</strong>
 							</div>
 						</div>
-					</div>
+					</Card>
 
-					<div className="lg:col-span-5 bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs flex flex-col justify-between">
+					<Card className="lg:col-span-5 p-4 flex flex-col justify-between">
 						<div>
 							<div className="flex items-center justify-between pb-1">
 								<div>
 									<h2 className="text-xs font-bold text-slate-900">Compass Bearing &amp; Orientation</h2>
 									<p className="text-[11px] text-slate-400">Array heading vs real-time solar azimuth.</p>
 								</div>
-								<span className="bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded">
+								<Badge variant="blue" size="sm">
 									{azimuth}° Heading
-								</span>
+								</Badge>
 							</div>
 
 							<div className="flex flex-col items-center justify-center py-3">
@@ -401,7 +404,7 @@ const SolarSystemPage = () => {
 								{solarPosition.currentKw} kW ({solarPosition.alignment}% rated)
 							</span>
 						</div>
-					</div>
+					</Card>
 				</div>
 
 				{/* Geographic Installation Location & Footprint Map */}
@@ -417,7 +420,7 @@ const SolarSystemPage = () => {
 				/>
 
 				{/* Bottom Panel: System Electrical Configuration */}
-				<div className="bg-white border border-slate-200/90 rounded-lg p-5 shadow-xs">
+				<Card className="p-5">
 					<h2 className="text-xs font-bold text-slate-900 mb-4">System Electrical Configuration</h2>
 
 					<div className="grid grid-cols-1 sm:grid-cols-5 gap-2 items-center">
@@ -459,10 +462,10 @@ const SolarSystemPage = () => {
 							<div className="text-[10px] font-semibold text-emerald-600 mt-1">230V / 50Hz</div>
 						</div>
 					</div>
-				</div>
+				</Card>
 
 				{/* Accordion: Advanced Technical Parameters & Loss Derates (Level 2) */}
-				<div className="bg-white border border-slate-200/90 rounded-lg shadow-xs overflow-hidden">
+				<Card className="overflow-hidden">
 					<button
 						type="button"
 						onClick={() => setAccordionOpen(!accordionOpen)}
@@ -498,198 +501,182 @@ const SolarSystemPage = () => {
 							</div>
 						</div>
 					)}
-				</div>
+				</Card>
 
 				{/* Modal for Edit System Configuration */}
-				{showEditModal && (
-					<div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-2xs flex items-center justify-center p-4">
-						<div className="bg-white rounded-xl shadow-2xl border border-slate-200 max-w-xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-150">
-							<div className="flex items-center justify-between pb-3 border-b border-slate-100">
-								<div className="flex items-center gap-2">
-									<div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
-										<Edit className="w-4 h-4" />
-									</div>
-									<div>
-										<h2 className="text-sm font-bold text-slate-900">Edit System Configuration</h2>
-										<p className="text-[11px] text-slate-400">Update hardware specifications &amp; solar array physical layout.</p>
-									</div>
-								</div>
-								<button
-									type="button"
-									onClick={() => setShowEditModal(false)}
-									className="text-slate-400 hover:text-slate-600 p-1"
-								>
-									<X className="w-4 h-4" />
-								</button>
+				<Modal
+					isOpen={showEditModal}
+					onClose={() => setShowEditModal(false)}
+					title="Edit System Configuration"
+					subtitle="Update hardware specifications & solar array physical layout."
+					maxWidth="max-w-xl"
+				>
+					{editError && (
+						<div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg text-xs flex items-center gap-2 mb-4">
+							<AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+							<span>{editError}</span>
+						</div>
+					)}
+
+					<form onSubmit={handleSaveConfig} className="space-y-4">
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+							<div className="sm:col-span-2">
+								<label className="block text-[11px] font-bold text-slate-700 mb-1">
+									Installation Name / Designation
+								</label>
+								<input
+									type="text"
+									required
+									value={formData.name}
+									onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+									className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500"
+								/>
 							</div>
 
-							{editError && (
-								<div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded text-xs flex items-center gap-2">
-									<AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
-									<span>{editError}</span>
-								</div>
-							)}
+							<div>
+								<label className="block text-[11px] font-bold text-slate-700 mb-1">
+									Rated Capacity (kWp)
+								</label>
+								<input
+									type="number"
+									step="0.01"
+									min="0.5"
+									max="100.0"
+									required
+									value={formData.systemCapacity}
+									onChange={(e) => setFormData({ ...formData, systemCapacity: e.target.value })}
+									className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-tabular"
+								/>
+							</div>
 
-							<form onSubmit={handleSaveConfig} className="space-y-4">
-								<div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-									<div className="sm:col-span-2">
-										<label className="block text-[11px] font-bold text-slate-700 mb-1">
-											Installation Name / Designation
-										</label>
-										<input
-											type="text"
-											required
-											value={formData.name}
-											onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-											className="w-full bg-white border border-slate-300 rounded px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500"
-										/>
-									</div>
+							<div>
+								<label className="block text-[11px] font-bold text-slate-700 mb-1">
+									Number of Solar Modules
+								</label>
+								<input
+									type="number"
+									min="1"
+									max="500"
+									required
+									value={formData.numberOfPanels}
+									onChange={(e) => setFormData({ ...formData, numberOfPanels: e.target.value })}
+									className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-tabular"
+								/>
+							</div>
 
-									<div>
-										<label className="block text-[11px] font-bold text-slate-700 mb-1">
-											Rated Capacity (kWp)
-										</label>
-										<input
-											type="number"
-											step="0.01"
-											min="0.5"
-											max="100.0"
-											required
-											value={formData.systemCapacity}
-											onChange={(e) => setFormData({ ...formData, systemCapacity: e.target.value })}
-											className="w-full bg-white border border-slate-300 rounded px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
-										/>
-									</div>
+							<div>
+								<label className="block text-[11px] font-bold text-slate-700 mb-1">
+									Roof Mounting Pitch (Tilt Angle °)
+								</label>
+								<input
+									type="number"
+									step="0.5"
+									min="0"
+									max="90"
+									required
+									value={formData.tiltDeg}
+									onChange={(e) => setFormData({ ...formData, tiltDeg: e.target.value })}
+									className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-tabular"
+								/>
+							</div>
 
-									<div>
-										<label className="block text-[11px] font-bold text-slate-700 mb-1">
-											Number of Solar Modules
-										</label>
-										<input
-											type="number"
-											min="1"
-											max="500"
-											required
-											value={formData.numberOfPanels}
-											onChange={(e) => setFormData({ ...formData, numberOfPanels: e.target.value })}
-											className="w-full bg-white border border-slate-300 rounded px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
-										/>
-									</div>
+							<div>
+								<label className="block text-[11px] font-bold text-slate-700 mb-1">
+									Panel Direction (Azimuth °)
+								</label>
+								<input
+									type="number"
+									step="0.5"
+									min="0"
+									max="360"
+									required
+									value={formData.azimuthDeg}
+									onChange={(e) => setFormData({ ...formData, azimuthDeg: e.target.value })}
+									className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-tabular"
+								/>
+								<span className="text-[10px] text-slate-400">180° = True South (Optimal in Northern Hemisphere)</span>
+							</div>
 
-									<div>
-										<label className="block text-[11px] font-bold text-slate-700 mb-1">
-											Roof Mounting Pitch (Tilt Angle °)
-										</label>
-										<input
-											type="number"
-											step="0.5"
-											min="0"
-											max="90"
-											required
-											value={formData.tiltDeg}
-											onChange={(e) => setFormData({ ...formData, tiltDeg: e.target.value })}
-											className="w-full bg-white border border-slate-300 rounded px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
-										/>
-									</div>
+							<div>
+								<label className="block text-[11px] font-bold text-slate-700 mb-1">
+									Inverter Hardware Serial
+								</label>
+								<input
+									type="text"
+									required
+									value={formData.inverterSerialNumber}
+									onChange={(e) => setFormData({ ...formData, inverterSerialNumber: e.target.value })}
+									className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
+								/>
+							</div>
 
-									<div>
-										<label className="block text-[11px] font-bold text-slate-700 mb-1">
-											Panel Direction (Azimuth °)
-										</label>
-										<input
-											type="number"
-											step="0.5"
-											min="0"
-											max="360"
-											required
-											value={formData.azimuthDeg}
-											onChange={(e) => setFormData({ ...formData, azimuthDeg: e.target.value })}
-											className="w-full bg-white border border-slate-300 rounded px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
-										/>
-										<span className="text-[10px] text-slate-400">180° = True South (Optimal in Northern Hemisphere)</span>
-									</div>
+							<div>
+								<label className="block text-[11px] font-bold text-slate-700 mb-1">
+									Inverter Efficiency (%)
+								</label>
+								<input
+									type="number"
+									step="0.1"
+									min="80"
+									max="99.9"
+									required
+									value={formData.inv_efficiency}
+									onChange={(e) => setFormData({ ...formData, inv_efficiency: e.target.value })}
+									className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-tabular"
+								/>
+							</div>
 
-									<div>
-										<label className="block text-[11px] font-bold text-slate-700 mb-1">
-											Inverter Hardware Serial
-										</label>
-										<input
-											type="text"
-											required
-											value={formData.inverterSerialNumber}
-											onChange={(e) => setFormData({ ...formData, inverterSerialNumber: e.target.value })}
-											className="w-full bg-white border border-slate-300 rounded px-3 py-1.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500"
-										/>
-									</div>
+							<div>
+								<label className="block text-[11px] font-bold text-slate-700 mb-1">
+									Soiling Loss Derate (%)
+								</label>
+								<input
+									type="number"
+									step="0.1"
+									min="0"
+									max="20"
+									value={formData.soilingLossPercent}
+									onChange={(e) => setFormData({ ...formData, soilingLossPercent: e.target.value })}
+									className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-tabular"
+								/>
+							</div>
 
-									<div>
-										<label className="block text-[11px] font-bold text-slate-700 mb-1">
-											Inverter Efficiency (%)
-										</label>
-										<input
-											type="number"
-											step="0.1"
-											min="80"
-											max="99.9"
-											required
-											value={formData.inv_efficiency}
-											onChange={(e) => setFormData({ ...formData, inv_efficiency: e.target.value })}
-											className="w-full bg-white border border-slate-300 rounded px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
-										/>
-									</div>
-
-									<div>
-										<label className="block text-[11px] font-bold text-slate-700 mb-1">
-											Soiling Loss Derate (%)
-										</label>
-										<input
-											type="number"
-											step="0.1"
-											min="0"
-											max="20"
-											value={formData.soilingLossPercent}
-											onChange={(e) => setFormData({ ...formData, soilingLossPercent: e.target.value })}
-											className="w-full bg-white border border-slate-300 rounded px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
-										/>
-									</div>
-
-									<div>
-										<label className="block text-[11px] font-bold text-slate-700 mb-1">
-											Shading Factor (0.00 – 1.00)
-										</label>
-										<input
-											type="number"
-											step="0.01"
-											min="0.1"
-											max="1.0"
-											value={formData.shadingFactor}
-											onChange={(e) => setFormData({ ...formData, shadingFactor: e.target.value })}
-											className="w-full bg-white border border-slate-300 rounded px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
-										/>
-									</div>
-								</div>
-
-								<div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
-									<button
-										type="button"
-										onClick={() => setShowEditModal(false)}
-										className="px-3.5 py-1.5 rounded-md text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
-									>
-										Cancel
-									</button>
-									<button
-										type="submit"
-										disabled={savingConfig}
-										className="bg-[#2563EB] hover:bg-blue-600 text-white font-semibold px-4 py-1.5 rounded-md text-xs shadow-xs transition-colors flex items-center gap-1.5"
-									>
-										<Save className="w-3.5 h-3.5" />
-										<span>{savingConfig ? "Saving..." : "Save Configuration"}</span>
-									</button>
-								</div>
-							</form>
+							<div>
+								<label className="block text-[11px] font-bold text-slate-700 mb-1">
+									Shading Factor (0.00 – 1.00)
+								</label>
+								<input
+									type="number"
+									step="0.01"
+									min="0.1"
+									max="1.0"
+									value={formData.shadingFactor}
+									onChange={(e) => setFormData({ ...formData, shadingFactor: e.target.value })}
+									className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-tabular"
+								/>
+							</div>
 						</div>
-					</div>
-				)}
+
+						<div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={() => setShowEditModal(false)}
+							>
+								Cancel
+							</Button>
+							<Button
+								type="submit"
+								variant="primary"
+								size="sm"
+								loading={savingConfig}
+								icon={Save}
+							>
+								Save Configuration
+							</Button>
+						</div>
+					</form>
+				</Modal>
 			</div>
 		</Layout>
 	);

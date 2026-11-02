@@ -1,5 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Layout from "../components/layout/Layout";
+import Card from "../components/ui/Card";
+import Badge from "../components/ui/Badge";
+import Button from "../components/ui/Button";
+import Modal from "../components/ui/Modal";
 import { useAuth } from "../context/AuthContext";
 import { fetchSOICDashboard, resolveSOICAlert } from "../services/soicApi";
 import {
@@ -24,19 +28,6 @@ import {
 	ResponsiveContainer
 } from "recharts";
 
-const DEFAULT_TEN_DAY_HISTORY = [
-	{ date: "10-31", expected: 22.4, actual: 17.0 },
-	{ date: "10-30", expected: 22.8, actual: 17.2 },
-	{ date: "10-29", expected: 23.0, actual: 17.5 },
-	{ date: "10-28", expected: 23.1, actual: 18.2 },
-	{ date: "10-27", expected: 22.7, actual: 19.5 },
-	{ date: "10-26", expected: 22.4, actual: 20.2 },
-	{ date: "10-25", expected: 21.9, actual: 20.9 },
-	{ date: "10-24", expected: 22.5, actual: 21.8 },
-	{ date: "10-23", expected: 23.1, actual: 22.6 },
-	{ date: "10-22", expected: 22.8, actual: 22.4 }
-];
-
 const AlertsPage = () => {
 	const { isAdmin, selectedSite, selectedSiteId } = useAuth();
 	const [activeTab, setActiveTab] = useState("active");
@@ -49,6 +40,31 @@ const AlertsPage = () => {
 	const [activeAlertItem, setActiveAlertItem] = useState(null);
 	const [resolving, setResolving] = useState(false);
 	const [resolveSuccessMsg, setResolveSuccessMsg] = useState("");
+
+	const cap = Number(selectedSite?.systemCapacity) || 5.0;
+
+	// Dynamic 10-day history computed from current date and active site capacity
+	const tenDayHistory = useMemo(() => {
+		const days = [];
+		const isOutage = selectedSite?.status === "System Outage";
+		const now = new Date();
+		for (let i = 9; i >= 0; i--) {
+			const d = new Date(now);
+			d.setDate(d.getDate() - i);
+			const monthStr = String(d.getMonth() + 1).padStart(2, "0");
+			const dayStr = String(d.getDate()).padStart(2, "0");
+			const expectedVal = +(cap * (4.5 + Math.sin(i * 0.7) * 0.3)).toFixed(1);
+			const actualVal = (i === 0 && isOutage && !resolved)
+				? 0.0
+				: +(expectedVal * (0.92 + Math.cos(i * 0.5) * 0.06)).toFixed(1);
+			days.push({
+				date: `${monthStr}-${dayStr}`,
+				expected: expectedVal,
+				actual: actualVal
+			});
+		}
+		return days;
+	}, [cap, selectedSite?.status, resolved]);
 
 	// Load live alerts from backend filtered by active site
 	const loadAlerts = useCallback(async () => {
@@ -234,12 +250,12 @@ const AlertsPage = () => {
 				{activeTab === "active" && (
 					<>
 						{showActiveIncident ? (
-							<div className="bg-white border border-rose-200 rounded-lg p-5 shadow-xs space-y-4">
+							<Card className="p-5 border-rose-200 space-y-4">
 								<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100">
 									<div className="flex flex-wrap items-center gap-2 text-xs">
-										<span className="bg-rose-50 text-rose-700 font-bold px-2 py-0.5 rounded border border-rose-200">
+										<Badge variant="rose" size="sm">
 											Critical Priority: System Outage
-										</span>
+										</Badge>
 										<span className="text-slate-500 font-mono text-[11px]">
 											ID: {activeAlert?.incidentId}
 										</span>
@@ -254,13 +270,13 @@ const AlertsPage = () => {
 									</div>
 
 									{isAdmin && (
-										<button
-											type="button"
+										<Button
+											variant="primary"
+											size="sm"
 											onClick={() => setShowResolveModal(true)}
-											className="bg-[#2563EB] hover:bg-blue-600 text-white font-semibold px-4 py-1.5 rounded-md text-xs shadow-xs transition-colors self-start sm:self-auto"
 										>
 											Resolve Alert
-										</button>
+										</Button>
 									)}
 								</div>
 
@@ -269,37 +285,37 @@ const AlertsPage = () => {
 								</h2>
 
 								<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs pt-1">
-									<div className="bg-slate-50 p-3 rounded border border-slate-100">
+									<div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
 										<span className="text-[11px] font-bold text-slate-500 block mb-1">What happened?</span>
 										<p className="text-slate-700 leading-relaxed text-[11px]">
 											Actual output is 98.5% lower than expected for current sunlight conditions.
 										</p>
 									</div>
 
-									<div className="bg-slate-50 p-3 rounded border border-slate-100">
+									<div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
 										<span className="text-[11px] font-bold text-slate-500 block mb-1">Affected Installation:</span>
 										<p className="text-slate-700 leading-relaxed text-[11px]">
 											Rooftop Photovoltaic Modules (14 Panels, Groups 1 &amp; 2)
 										</p>
 									</div>
 
-									<div className="bg-slate-50 p-3 rounded border border-slate-100">
+									<div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
 										<span className="text-[11px] font-bold text-slate-500 block mb-1">Date Detected:</span>
 										<p className="text-slate-700 font-mono leading-relaxed text-[11px]">
 											{activeAlert?.createdAt}
 										</p>
 									</div>
 
-									<div className="bg-emerald-50/60 p-3 rounded border border-emerald-100">
+									<div className="bg-emerald-50/60 p-3 rounded-lg border border-emerald-100">
 										<span className="text-[11px] font-bold text-emerald-800 block mb-1">Recommended Action:</span>
 										<p className="text-emerald-700 font-semibold leading-relaxed text-[11px]">
 											Inspect inverter string fuses and DC isolation switch.
 										</p>
 									</div>
 								</div>
-							</div>
+							</Card>
 						) : (
-							<div className="bg-white border border-slate-200/90 rounded-lg p-10 shadow-xs flex flex-col items-center justify-center text-center">
+							<Card className="p-10 flex flex-col items-center justify-center text-center">
 								<div className="w-12 h-12 rounded-full bg-emerald-50 border-2 border-emerald-500 flex items-center justify-center text-emerald-600 mb-3 shadow-2xs">
 									<CheckCircle2 className="w-6 h-6 stroke-[2.5]" />
 								</div>
@@ -307,7 +323,7 @@ const AlertsPage = () => {
 								<p className="text-xs text-slate-500 mt-1 max-w-md leading-relaxed">
 									No active alerts or hardware anomalies detected for <strong>{selectedSite?.shortName || selectedSite?.name || "Haider — Lucknow Rooftop"}</strong>. Your solar installation is producing within nominal parameters.
 								</p>
-							</div>
+							</Card>
 						)}
 					</>
 				)}
@@ -316,12 +332,12 @@ const AlertsPage = () => {
 				{activeTab === "acknowledged" && (
 					<>
 						{showAcknowledgedIncident ? (
-							<div className="bg-white border border-amber-200 rounded-lg p-5 shadow-xs space-y-4">
+							<Card className="p-5 border-amber-200 space-y-4">
 								<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100">
 									<div className="flex flex-wrap items-center gap-2 text-xs">
-										<span className="bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded border border-amber-200">
+										<Badge variant="amber" size="sm">
 											Acknowledged Outage
-										</span>
+										</Badge>
 										<span className="text-slate-500 font-mono text-[11px]">
 											ID: {activeAlert?.incidentId}
 										</span>
@@ -336,13 +352,13 @@ const AlertsPage = () => {
 									</div>
 
 									{isAdmin && (
-										<button
-											type="button"
+										<Button
+											variant="primary"
+											size="sm"
 											onClick={() => setShowResolveModal(true)}
-											className="bg-[#2563EB] hover:bg-blue-600 text-white font-semibold px-4 py-1.5 rounded-md text-xs shadow-xs transition-colors self-start sm:self-auto"
 										>
 											Resolve Alert
-										</button>
+										</Button>
 									)}
 								</div>
 
@@ -353,9 +369,9 @@ const AlertsPage = () => {
 								<p className="text-xs text-slate-600">
 									Technician dispatch has been scheduled for string inspection and hardware fuse replacement.
 								</p>
-							</div>
+							</Card>
 						) : (
-							<div className="bg-white border border-slate-200/90 rounded-lg p-10 shadow-xs flex flex-col items-center justify-center text-center">
+							<Card className="p-10 flex flex-col items-center justify-center text-center">
 								<div className="w-12 h-12 rounded-full bg-slate-50 border-2 border-slate-300 flex items-center justify-center text-slate-500 mb-3 shadow-2xs">
 									<Check className="w-6 h-6 stroke-[2.5]" />
 								</div>
@@ -363,7 +379,7 @@ const AlertsPage = () => {
 								<p className="text-xs text-slate-500 mt-1 max-w-md leading-relaxed">
 									All hardware alerts for <strong>{selectedSite?.shortName || selectedSite?.name || "Haider — Lucknow Rooftop"}</strong> have been addressed or resolved.
 								</p>
-							</div>
+							</Card>
 						)}
 					</>
 				)}
@@ -372,12 +388,12 @@ const AlertsPage = () => {
 				{activeTab === "resolved" && (
 					<div className="space-y-3">
 						{resolved && (
-							<div className="bg-white border border-emerald-200 rounded-lg p-5 shadow-xs space-y-3">
+							<Card className="p-5 border-emerald-200 space-y-3">
 								<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100">
 									<div className="flex flex-wrap items-center gap-2 text-xs">
-										<span className="bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded border border-emerald-200">
+										<Badge variant="emerald" size="sm">
 											Resolved: Hardware Restored
-										</span>
+										</Badge>
 										<span className="text-slate-500 font-mono text-[11px]">
 											ID: {activeAlert?.incidentId || "#INC-84921"}
 										</span>
@@ -386,27 +402,27 @@ const AlertsPage = () => {
 											{activeAlert?.siteName || selectedSite?.name}
 										</span>
 									</div>
-									<span className="text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+									<Badge variant="emerald" size="sm">
 										Resolved Just Now
-									</span>
+									</Badge>
 								</div>
 
 								<div className="text-xs text-slate-700 space-y-1">
 									<span className="font-bold text-slate-900 block">Technician Resolution Notes:</span>
-									<p className="text-slate-600 bg-slate-50 p-2.5 rounded border border-slate-100 font-mono text-[11px]">
+									<p className="text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100 font-mono text-[11px]">
 										{resolveNotes}
 									</p>
 								</div>
-							</div>
+							</Card>
 						)}
 
 						{/* Base Historical Resolved Incident */}
-						<div className="bg-white border border-slate-200/90 rounded-lg p-5 shadow-xs space-y-3">
+						<Card className="p-5 space-y-3">
 							<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100">
 								<div className="flex flex-wrap items-center gap-2 text-xs">
-									<span className="bg-slate-100 text-slate-700 font-bold px-2 py-0.5 rounded border border-slate-200">
+									<Badge variant="slate" size="sm">
 										Resolved: String Calibration &amp; Inspection
-									</span>
+									</Badge>
 									<span className="text-slate-500 font-mono text-[11px]">ID: #INC-72104</span>
 									<span className="text-slate-400">•</span>
 									<span className="font-bold text-slate-800">
@@ -429,12 +445,12 @@ const AlertsPage = () => {
 									<ShieldCheck className="w-3.5 h-3.5" /> Verified
 								</span>
 							</div>
-						</div>
+						</Card>
 					</div>
 				)}
 
 				{/* 10-Day Performance History Grouped Bar Chart */}
-				<div className="bg-white border border-slate-200/90 rounded-lg p-5 shadow-xs">
+				<Card className="p-5">
 					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2">
 						<div>
 							<h2 className="text-xs font-bold text-slate-900">10-Day Performance History</h2>
@@ -456,76 +472,65 @@ const AlertsPage = () => {
 
 					<div className="h-56 w-full pt-3">
 						<ResponsiveContainer width="100%" height="100%">
-							<BarChart data={DEFAULT_TEN_DAY_HISTORY} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+							<BarChart data={tenDayHistory} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
 								<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
 								<XAxis dataKey="date" tick={{ fontSize: 10, fill: "#64748B" }} tickLine={false} />
 								<YAxis
 									tick={{ fontSize: 10, fill: "#64748B" }}
 									tickLine={false}
 									unit=" kWh"
-									domain={[0, 24]}
-									ticks={[0, 6, 12, 18, 24]}
+									domain={[0, +(cap * 5.5).toFixed(0)]}
 								/>
 								<Tooltip
-									contentStyle={{ backgroundColor: "#1E293B", border: "none", borderRadius: "6px", color: "#FFF", fontSize: "11px" }}
+									contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.06)", color: "#1E293B", fontSize: "12px", fontFamily: "Inter, sans-serif" }}
 								/>
 								<Bar dataKey="expected" fill="#2563EB" radius={[2, 2, 0, 0]} maxBarSize={20} />
 								<Bar dataKey="actual" fill="#10B981" radius={[2, 2, 0, 0]} maxBarSize={20} />
 							</BarChart>
 						</ResponsiveContainer>
 					</div>
-				</div>
+				</Card>
 
 				{/* Modal for Resolve Alert */}
-				{showResolveModal && (
-					<div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-2xs flex items-center justify-center p-4">
-						<div className="bg-white rounded-lg shadow-xl border border-slate-200 max-w-md w-full p-5 space-y-4 animate-in fade-in zoom-in-95 duration-150">
-							<div className="flex items-center justify-between pb-2 border-b border-slate-100">
-								<h3 className="text-sm font-bold text-slate-900">Resolve Operational Incident</h3>
-								<button
-									type="button"
-									onClick={() => setShowResolveModal(false)}
-									className="text-slate-400 hover:text-slate-600 p-1"
-								>
-									<X className="w-4 h-4" />
-								</button>
-							</div>
+				<Modal
+					isOpen={showResolveModal}
+					onClose={() => setShowResolveModal(false)}
+					title="Resolve Operational Incident"
+					subtitle={`Incident ${activeAlert?.incidentId || "#INC-84921"} at ${activeAlert?.siteName || "Jaipur Solar Farm West"}.`}
+					maxWidth="max-w-md"
+				>
+					<div className="text-xs text-slate-600 space-y-3">
+						<div>
+							<label className="block text-xs font-semibold text-slate-700 mb-1">
+								Technician Resolution Notes:
+							</label>
+							<textarea
+								rows={3}
+								value={resolveNotes}
+								onChange={(e) => setResolveNotes(e.target.value)}
+								className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
+							/>
+						</div>
 
-							<div className="text-xs text-slate-600 space-y-2">
-								<p>
-									Incident <strong>{activeAlert?.incidentId || "#INC-84921"}</strong> at {activeAlert?.siteName || "Jaipur Solar Farm West"}.
-								</p>
-								<label className="block text-xs font-semibold text-slate-700 pt-2">
-									Technician Resolution Notes:
-								</label>
-								<textarea
-									rows={3}
-									value={resolveNotes}
-									onChange={(e) => setResolveNotes(e.target.value)}
-									className="w-full bg-slate-50 border border-slate-300 rounded p-2 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500"
-								/>
-							</div>
-
-							<div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
-								<button
-									type="button"
-									onClick={() => setShowResolveModal(false)}
-									className="px-3 py-1.5 rounded text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
-								>
-									Cancel
-								</button>
-								<button
-									type="button"
-									onClick={handleResolve}
-									disabled={resolving}
-									className="bg-[#2563EB] hover:bg-blue-600 text-white font-semibold px-4 py-1.5 rounded text-xs transition-colors flex items-center gap-1.5"
-								>
-									{resolving ? "Resolving..." : "Confirm Resolution"}
-								</button>
-							</div>
+						<div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={() => setShowResolveModal(false)}
+							>
+								Cancel
+							</Button>
+							<Button
+								variant="primary"
+								size="sm"
+								onClick={handleResolve}
+								loading={resolving}
+							>
+								Confirm Resolution
+							</Button>
 						</div>
 					</div>
-				)}
+				</Modal>
 			</div>
 		</Layout>
 	);

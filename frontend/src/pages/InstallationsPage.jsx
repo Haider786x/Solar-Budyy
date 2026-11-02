@@ -1,6 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/layout/Layout";
+import Card from "../components/ui/Card";
+import Badge from "../components/ui/Badge";
+import Button from "../components/ui/Button";
 import RegionalMap from "../components/RegionalMap";
 import { useAuth, formatLocationString } from "../context/AuthContext";
 import {
@@ -79,53 +82,53 @@ const InstallationsPage = () => {
 						</h1>
 					</div>
 
-					<button
-						type="button"
+					<Button
+						variant="primary"
+						size="sm"
 						onClick={() => navigate("/register")}
-						className="bg-[#2563EB] hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md text-xs flex items-center gap-1.5 shadow-xs transition-colors self-start sm:self-auto"
+						icon={Plus}
 					>
-						<Plus className="w-4 h-4" />
 						Add New Installation
-					</button>
+					</Button>
 				</div>
 
-				{/* 4 Summary Strip Cards matching Screenshot 15 */}
+				{/* 4 Summary Strip Cards */}
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<span className="text-[11px] text-slate-400 font-medium block">Total Fleet Capacity</span>
 						<div className="flex items-baseline gap-1 mt-1">
-							<span className="text-3xl font-extrabold text-slate-900 tracking-tight">{totalCapacity}</span>
+							<span className="text-3xl font-extrabold text-slate-900 tracking-tight font-tabular">{totalCapacity}</span>
 							<span className="text-sm font-semibold text-slate-500">kWp</span>
 						</div>
-					</div>
+					</Card>
 
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<span className="text-[11px] text-slate-400 font-medium block">Normal Operation</span>
 						<div className="flex items-baseline gap-1 mt-1">
-							<span className="text-3xl font-extrabold text-emerald-600 tracking-tight">{normalCount}</span>
+							<span className="text-3xl font-extrabold text-emerald-600 tracking-tight font-tabular">{normalCount}</span>
 							<span className="text-sm font-semibold text-slate-500">sites</span>
 						</div>
-					</div>
+					</Card>
 
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<span className="text-[11px] text-slate-400 font-medium block">Performance Alerts</span>
 						<div className="flex items-baseline gap-1 mt-1">
-							<span className="text-3xl font-extrabold text-amber-500 tracking-tight">{alertCount}</span>
+							<span className="text-3xl font-extrabold text-amber-500 tracking-tight font-tabular">{alertCount}</span>
 							<span className="text-sm font-semibold text-slate-500">sites</span>
 						</div>
-					</div>
+					</Card>
 
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<span className="text-[11px] text-slate-400 font-medium block">System Outages</span>
 						<div className="flex items-baseline gap-1 mt-1">
-							<span className="text-3xl font-extrabold text-rose-600 tracking-tight">{outageCount}</span>
+							<span className="text-3xl font-extrabold text-rose-600 tracking-tight font-tabular">{outageCount}</span>
 							<span className="text-sm font-semibold text-slate-500">sites</span>
 						</div>
-					</div>
+					</Card>
 				</div>
 
 				{/* Regional Fleet Installation Map */}
-				<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+				<Card className="p-4">
 					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
 						<div className="flex items-center gap-2">
 							<div className="w-7 h-7 rounded bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
@@ -150,7 +153,7 @@ const InstallationsPage = () => {
 					<div className="h-72 w-full overflow-hidden rounded-lg mt-3 border border-slate-200 shadow-inner">
 						<RegionalMap users={fleetSites} onSelectSite={handleOpenSite} />
 					</div>
-				</div>
+				</Card>
 
 				{/* Search & Filter Bar */}
 				<div className="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
@@ -161,7 +164,7 @@ const InstallationsPage = () => {
 							value={searchTerm}
 							onChange={(e) => setSearchTerm(e.target.value)}
 							placeholder="Search by city, installation name, or owner..."
-							className="w-full bg-white border border-slate-300 rounded-md pl-9 pr-3 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+							className="w-full bg-white border border-slate-300 rounded-lg pl-9 pr-3 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
 						/>
 					</div>
 
@@ -170,7 +173,7 @@ const InstallationsPage = () => {
 						<select
 							value={statusFilter}
 							onChange={(e) => setStatusFilter(e.target.value)}
-							className="w-full bg-white border border-slate-300 rounded-md pl-8 pr-3 py-2 text-xs text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+							className="w-full bg-white border border-slate-300 rounded-lg pl-8 pr-3 py-2 text-xs text-slate-700 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
 						>
 							<option value="all">Filter by Status: All Installations</option>
 							<option value="normal">Normal Operation Only</option>
@@ -180,7 +183,7 @@ const InstallationsPage = () => {
 				</div>
 
 				{/* Fleet Installations Table */}
-				<div className="bg-white border border-slate-200/90 rounded-lg shadow-xs overflow-hidden">
+				<Card className="overflow-hidden">
 					<div className="overflow-x-auto">
 						<table className="w-full text-left text-xs">
 							<thead>
@@ -204,8 +207,8 @@ const InstallationsPage = () => {
 										<td className="py-3 px-4 text-slate-700 font-medium">
 											{typeof site.location === "string" ? site.location : formatLocationString(site.location, "Lucknow, India")}
 										</td>
-										<td className="py-3 px-4 font-mono font-semibold text-slate-800">{site.systemCapacity} kWp</td>
-										<td className="py-3 px-4 font-mono font-bold">
+										<td className="py-3 px-4 font-mono font-semibold text-slate-800 font-tabular">{site.systemCapacity} kWp</td>
+										<td className="py-3 px-4 font-mono font-bold font-tabular">
 											{site.currentOutputKw > 0 ? (
 												<span className="text-emerald-600">{site.currentOutputKw} kW</span>
 											) : (
@@ -214,15 +217,15 @@ const InstallationsPage = () => {
 										</td>
 										<td className="py-3 px-4">
 											{site.status === "Normal" ? (
-												<span className="inline-flex items-center gap-1 font-bold text-emerald-700 text-[11px]">
-													<CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+												<Badge variant="emerald" size="sm">
+													<CheckCircle2 className="w-3 h-3 mr-1 inline" />
 													Normal
-												</span>
+												</Badge>
 											) : (
-												<span className="inline-flex items-center gap-1 font-bold text-rose-700 text-[11px]">
-													<AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+												<Badge variant="rose" size="sm">
+													<AlertTriangle className="w-3 h-3 mr-1 inline" />
 													System Outage
-												</span>
+												</Badge>
 											)}
 										</td>
 										<td className="py-3 px-4">
@@ -239,21 +242,21 @@ const InstallationsPage = () => {
 											)}
 										</td>
 										<td className="py-3 px-4 text-right">
-											<button
-												type="button"
+											<Button
+												variant="primary"
+												size="xs"
 												onClick={() => handleOpenSite(site.id)}
-												className="bg-[#2563EB] hover:bg-blue-600 text-white font-semibold px-3 py-1 rounded text-[11px] inline-flex items-center gap-1 shadow-2xs transition-colors"
+												icon={ExternalLink}
 											>
 												Open Site
-												<ExternalLink className="w-3 h-3 ml-0.5" />
-											</button>
+											</Button>
 										</td>
 									</tr>
 								))}
 							</tbody>
 						</table>
 					</div>
-				</div>
+				</Card>
 			</div>
 		</Layout>
 	);

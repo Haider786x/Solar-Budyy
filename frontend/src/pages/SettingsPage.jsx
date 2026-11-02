@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import Layout from "../components/layout/Layout";
+import Card from "../components/ui/Card";
+import Badge from "../components/ui/Badge";
+import Button from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
 import { useDemo } from "../context/DemoContext";
 import {
@@ -87,15 +90,15 @@ const SettingsPage = () => {
 
 					<div className="flex items-center gap-2">
 						{isAdmin ? (
-							<span className="bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded flex items-center gap-1.5">
-								<ShieldCheck className="w-3.5 h-3.5" />
-								<span>Fleet Operations Admin (Full Access)</span>
-							</span>
+							<Badge variant="emerald" size="sm">
+								<ShieldCheck className="w-3.5 h-3.5 mr-1 inline" />
+								Admin Access
+							</Badge>
 						) : (
-							<span className="bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold px-2.5 py-1 rounded flex items-center gap-1.5">
-								<Lock className="w-3.5 h-3.5 text-slate-400" />
-								<span>Site Owner View (Read-Only)</span>
-							</span>
+							<Badge variant="slate" size="sm">
+								<Lock className="w-3.5 h-3.5 mr-1 text-slate-400 inline" />
+								Read-Only View
+							</Badge>
 						)}
 					</div>
 				</div>
@@ -109,19 +112,19 @@ const SettingsPage = () => {
 								Administrative privileges required to modify hardware telemetry parameters. Switch to <strong>Admin</strong> in the top navigation bar to adjust configuration.
 							</span>
 						</div>
-						<button
-							type="button"
+						<Button
+							variant="secondary"
+							size="xs"
 							onClick={() => switchRole("admin")}
-							className="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-1 rounded text-[11px] shrink-0 transition-colors"
 						>
 							Switch to Admin
-						</button>
+						</Button>
 					</div>
 				)}
 
 				{saveMessage && (
 					<div
-						className={`p-3 rounded-md text-xs font-medium flex items-center gap-2 border ${
+						className={`p-3 rounded-lg text-xs font-medium flex items-center gap-2 border ${
 							saveMessage.includes("Failed")
 								? "bg-rose-50 border-rose-200 text-rose-800"
 								: "bg-emerald-50 border-emerald-200 text-emerald-800"
@@ -134,7 +137,7 @@ const SettingsPage = () => {
 
 				<form onSubmit={handleSave} className="space-y-4">
 					{/* Primary Settings Card: Real-Time Inverter Telemetry Stream */}
-					<div className="bg-white border border-slate-200/90 rounded-lg p-5 shadow-xs">
+					<Card className="p-5">
 						<div className="flex items-center justify-between pb-3 border-b border-slate-100">
 							<div className="flex items-center gap-2.5">
 								<div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center">
@@ -171,7 +174,7 @@ const SettingsPage = () => {
 						{/* Configuration Details */}
 						<div className="pt-4 space-y-4">
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-								<div className="bg-slate-50 border border-slate-200/80 rounded-md p-3 text-xs">
+								<div className="bg-slate-50 border border-slate-200/80 rounded-lg p-3 text-xs">
 									<label className="text-[11px] font-bold text-slate-700 block mb-1">
 										Inverter Hardware Serial
 									</label>
@@ -180,18 +183,18 @@ const SettingsPage = () => {
 											type="text"
 											readOnly
 											value={effectiveInverterId}
-											className="bg-white border border-slate-200 rounded px-2.5 py-1.5 font-mono font-bold text-slate-900 text-xs w-full"
+											className="bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 font-mono font-bold text-slate-900 text-xs w-full"
 										/>
-										<span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-1 rounded shrink-0">
-											Hardware Bound
-										</span>
+										<Badge variant="emerald" size="sm">
+											Bound
+										</Badge>
 									</div>
 									<p className="text-[10px] text-slate-400 mt-1.5 leading-snug">
-										Inverter identifier synchronized across SCADA telemetry sections.
+										Inverter identifier synchronized across telemetry sections.
 									</p>
 								</div>
 
-								<div className="bg-slate-50 border border-slate-200/80 rounded-md p-3 text-xs">
+								<div className="bg-slate-50 border border-slate-200/80 rounded-lg p-3 text-xs">
 									<label className="text-[11px] font-bold text-slate-700 block mb-1">
 										Irradiance Variance Tolerance
 									</label>
@@ -204,37 +207,37 @@ const SettingsPage = () => {
 											value={tolerance}
 											disabled={!isAdmin || saving}
 											onChange={(e) => setToleranceVal(parseFloat(e.target.value) || 2.0)}
-											className={`bg-white border border-slate-200 rounded px-2.5 py-1.5 font-mono font-bold text-slate-900 text-xs w-28 ${!isAdmin ? "cursor-not-allowed bg-slate-100" : ""}`}
+											className={`bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 font-mono font-bold text-slate-900 text-xs w-28 font-tabular ${!isAdmin ? "cursor-not-allowed bg-slate-100" : ""}`}
 										/>
 										<span className="text-xs font-semibold text-slate-600">± kWh</span>
 									</div>
 									<p className="text-[10px] text-slate-400 mt-1.5 leading-snug">
-										Permitted deterministic variation around today's Open-Meteo &amp; pvlib predicted daily yield.
+										Permitted variation around today's predicted daily yield.
 									</p>
 								</div>
 							</div>
 
 							{/* Time-Awareness Notice */}
-							<div className="bg-blue-50/70 border border-blue-200/80 rounded-md p-3 text-xs text-blue-900 flex items-start gap-2.5">
+							<div className="bg-blue-50/70 border border-blue-200/80 rounded-lg p-3 text-xs text-blue-900 flex items-start gap-2.5">
 								<Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
 								<div className="space-y-1">
-									<span className="font-bold block">Strict Time-Aware Accumulation Active</span>
+									<span className="font-bold block">Time-based accumulation</span>
 									<p className="text-[11px] text-blue-800 leading-relaxed">
 										Current generation reflects energy accumulated strictly up to the current minute in{" "}
-										<strong className="font-semibold">Asia/Kolkata</strong> timezone. At noon, only the morning yield displays (~50%); full daily totals accumulate smoothly toward sunset.
+										<strong className="font-semibold">Asia/Kolkata</strong> timezone.
 									</p>
 								</div>
 							</div>
 
 							{/* Real Hardware Priority Notice */}
-							<div className="bg-slate-50 border border-slate-200 rounded-md p-3 text-xs text-slate-700 flex items-start gap-2.5">
+							<div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs text-slate-700 flex items-start gap-2.5">
 								<ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
 								<div>
 									<span className="font-bold block text-slate-900">Inverter Telemetry Status</span>
 									<p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
 										Current site:{" "}
 										<span className="text-emerald-700 font-bold">
-											Inverter Bound ({effectiveInverterId}) — Real-time telemetry synchronized and transmitting.
+											Inverter Bound ({effectiveInverterId}) — Real-time telemetry transmitting.
 										</span>
 									</p>
 								</div>
@@ -247,17 +250,18 @@ const SettingsPage = () => {
 								<span className="text-[11px] text-slate-400">
 									Configuration persists in database across sessions.
 								</span>
-								<button
+								<Button
 									type="submit"
-									disabled={saving}
-									className="bg-[#2563EB] hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md text-xs flex items-center gap-1.5 shadow-xs transition-colors"
+									variant="primary"
+									size="sm"
+									loading={saving}
+									icon={Save}
 								>
-									<Save className="w-3.5 h-3.5" />
-									<span>{saving ? "Saving Configuration..." : "Save Settings"}</span>
-								</button>
+									Save Settings
+								</Button>
 							</div>
 						)}
-					</div>
+					</Card>
 				</form>
 			</div>
 		</Layout>

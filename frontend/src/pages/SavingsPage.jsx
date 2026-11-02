@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import Layout from "../components/layout/Layout";
+import Card from "../components/ui/Card";
+import Badge from "../components/ui/Badge";
 import { useAuth } from "../context/AuthContext";
 import { fetchMonthlyProductionByUserId } from "../services/api";
 import {
@@ -124,45 +126,45 @@ const SavingsPage = () => {
 
 				{/* 4 Top KPI Cards */}
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<div className="flex items-center justify-between text-xs text-slate-500 font-medium">
 							<span>Year-to-Date Savings</span>
-							<span className="text-emerald-700 font-mono font-bold text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded">
+							<Badge variant="emerald" size="sm">
 								Jan-Oct 2026
-							</span>
+							</Badge>
 						</div>
 						<div className="flex items-baseline gap-1 mt-2">
-							<span className="text-3xl font-extrabold text-emerald-600 tracking-tight">
+							<span className="text-3xl font-extrabold text-emerald-600 tracking-tight font-tabular">
 								₹{ytdSavings.toLocaleString("en-IN")}
 							</span>
 						</div>
 						<div className="text-[11px] text-slate-400 mt-2">Direct electricity utility bill offset</div>
-					</div>
+					</Card>
 
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<div className="flex items-center justify-between text-xs text-slate-500 font-medium">
 							<span>Recorded Generation (YTD)</span>
-							<span className="text-slate-500 font-bold text-[10px] bg-slate-100 px-1.5 py-0.5 rounded">
+							<Badge variant="slate" size="sm">
 								10 Months
-							</span>
+							</Badge>
 						</div>
 						<div className="flex items-baseline gap-1 mt-2">
-							<span className="text-3xl font-extrabold text-slate-900 tracking-tight">
+							<span className="text-3xl font-extrabold text-slate-900 tracking-tight font-tabular">
 								{recordedYtd.toLocaleString("en-IN")}
 							</span>
 							<span className="text-sm font-semibold text-slate-500">kWh</span>
 						</div>
-						<div className="text-[11px] text-slate-400 mt-2">
+						<div className="text-[11px] text-slate-400 mt-2 font-tabular">
 							{recordedYtd > 0
 								? `Target: ${targetYtd.toLocaleString("en-IN")} kWh (${((recordedYtd / targetYtd) * 100).toFixed(1)}%)`
 								: `Target: ${targetYtd.toLocaleString("en-IN")} kWh (Awaiting Inverter Telemetry)`}
 						</div>
-					</div>
+					</Card>
 
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<div className="text-xs text-slate-500 font-medium">Average System Efficiency</div>
 						<div className="flex items-baseline gap-1 mt-2">
-							<span className="text-3xl font-extrabold text-blue-600 tracking-tight">{avgEfficiency}%</span>
+							<span className="text-3xl font-extrabold text-blue-600 tracking-tight font-tabular">{avgEfficiency}%</span>
 							<span className="text-xs font-bold text-slate-500">Efficiency</span>
 						</div>
 						<div className="text-[11px] text-slate-500 font-medium mt-2">
@@ -170,20 +172,20 @@ const SavingsPage = () => {
 								? "Within optimal range for Indian climatic conditions"
 								: "Ready for live inverter connection (PENDING_INVERTER_ID)"}
 						</div>
-					</div>
+					</Card>
 
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<div className="text-xs text-slate-500 font-medium">CO₂ Emissions Avoided</div>
 						<div className="flex items-baseline gap-1 mt-2">
-							<span className="text-3xl font-extrabold text-slate-900 tracking-tight">{co2Tons}</span>
+							<span className="text-3xl font-extrabold text-slate-900 tracking-tight font-tabular">{co2Tons}</span>
 							<span className="text-sm font-semibold text-slate-600">Metric Tons</span>
 						</div>
 						<div className="text-[11px] text-slate-400 mt-2">Based on CEA grid factor (0.71 kg/kWh)</div>
-					</div>
+					</Card>
 				</div>
 
 				{/* Monthly Production vs Expected Target (2026) Grouped Bar Chart */}
-				<div className="bg-white border border-slate-200/90 rounded-lg p-5 shadow-xs">
+				<Card className="p-5">
 					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2">
 						<div>
 							<h2 className="text-xs font-bold text-slate-900">Monthly Production vs Expected Target (2026)</h2>
@@ -216,18 +218,18 @@ const SavingsPage = () => {
 									unit=" kWh"
 								/>
 								<Tooltip
-									contentStyle={{ backgroundColor: "#1E293B", border: "none", borderRadius: "6px", color: "#FFF", fontSize: "11px" }}
+									contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.06)", color: "#1E293B", fontSize: "12px", fontFamily: "Inter, sans-serif" }}
 								/>
 								<Bar dataKey="expected" fill="#2563EB" radius={[2, 2, 0, 0]} maxBarSize={18} />
 								<Bar dataKey="actual" fill="#10B981" radius={[2, 2, 0, 0]} maxBarSize={18} />
 							</BarChart>
 						</ResponsiveContainer>
 					</div>
-				</div>
+				</Card>
 
 				{/* Two Bottom Panels */}
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-					<div className="lg:col-span-7 bg-white border border-slate-200/90 rounded-lg p-5 shadow-xs">
+					<Card className="lg:col-span-7 p-5">
 						<div className="flex items-center justify-between pb-3 border-b border-slate-100">
 							<div>
 								<h2 className="text-xs font-bold text-slate-900">Where Energy Is Lost (System Loss Breakdown)</h2>
@@ -235,9 +237,9 @@ const SavingsPage = () => {
 									Physical and environmental factors reducing peak module capacity to delivered AC electricity.
 								</p>
 							</div>
-							<span className="text-xs font-bold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded">
+							<Badge variant="slate" size="sm">
 								Total Loss: 17.8%
-							</span>
+							</Badge>
 						</div>
 
 						<div className="space-y-4 pt-4 text-xs">
@@ -293,9 +295,9 @@ const SavingsPage = () => {
 								</span>
 							</div>
 						</div>
-					</div>
+					</Card>
 
-					<div className="lg:col-span-5 bg-white border border-slate-200/90 rounded-lg p-5 shadow-xs flex flex-col justify-between">
+					<Card className="lg:col-span-5 p-5 flex flex-col justify-between">
 						<div>
 							<h2 className="text-xs font-bold text-slate-900">Verified Environmental Contribution</h2>
 							<p className="text-[11px] text-slate-400 mt-0.5 mb-4">
@@ -309,7 +311,7 @@ const SavingsPage = () => {
 									</div>
 									<div>
 										<span className="text-[10px] text-slate-500 font-medium block">Carbon Emissions Avoided</span>
-										<strong className="text-sm font-extrabold text-slate-900 block mt-0.5">
+										<strong className="text-sm font-extrabold text-slate-900 block mt-0.5 font-tabular">
 											{co2Tons || 5} Metric Tons CO₂
 										</strong>
 										<span className="text-[10px] text-slate-400">0.71 kg CO₂ per kWh generated</span>
@@ -322,7 +324,7 @@ const SavingsPage = () => {
 									</div>
 									<div>
 										<span className="text-[10px] text-slate-500 font-medium block">Tree Absorption Equivalency</span>
-										<strong className="text-sm font-extrabold text-emerald-700 block mt-0.5">
+										<strong className="text-sm font-extrabold text-emerald-700 block mt-0.5 font-tabular">
 											{matureTrees} Mature Trees
 										</strong>
 										<span className="text-[10px] text-slate-400">20 kg CO₂ per tree annually</span>
@@ -335,7 +337,7 @@ const SavingsPage = () => {
 									</div>
 									<div>
 										<span className="text-[10px] text-slate-500 font-medium block">Thermal Coal Conserved</span>
-										<strong className="text-sm font-extrabold text-slate-900 block mt-0.5">
+										<strong className="text-sm font-extrabold text-slate-900 block mt-0.5 font-tabular">
 											{Number(coalKg).toLocaleString("en-IN")} kg Coal
 										</strong>
 										<span className="text-[10px] text-slate-400">0.4 kg coal per thermal kWh</span>
@@ -343,7 +345,7 @@ const SavingsPage = () => {
 								</div>
 							</div>
 						</div>
-					</div>
+					</Card>
 				</div>
 			</div>
 		</Layout>

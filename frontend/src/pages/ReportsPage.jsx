@@ -1,5 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import Layout from "../components/layout/Layout";
+import Card from "../components/ui/Card";
+import Badge from "../components/ui/Badge";
+import Button from "../components/ui/Button";
 import { useAuth, formatLocationString } from "../context/AuthContext";
 import { fetchMonthlyProductionByUserId } from "../services/api";
 import { Download, Printer, CheckCircle2, Clock } from "lucide-react";
@@ -168,27 +171,27 @@ const ReportsPage = () => {
 					</div>
 
 					<div className="flex items-center gap-2 self-start sm:self-auto">
-						<button
-							type="button"
+						<Button
+							variant="secondary"
+							size="sm"
 							onClick={handleExportCSV}
-							className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold px-3.5 py-1.5 rounded-md text-xs flex items-center gap-1.5 shadow-2xs transition-colors"
+							icon={Download}
 						>
-							<Download className="w-3.5 h-3.5" />
-							<span>Export CSV</span>
-						</button>
-						<button
-							type="button"
+							Export CSV
+						</Button>
+						<Button
+							variant="primary"
+							size="sm"
 							onClick={handlePrint}
-							className="bg-[#2563EB] hover:bg-blue-600 text-white font-semibold px-3.5 py-1.5 rounded-md text-xs flex items-center gap-1.5 shadow-xs transition-colors"
+							icon={Printer}
 						>
-							<Printer className="w-3.5 h-3.5" />
-							<span>Print Statement (PDF)</span>
-						</button>
+							Print Statement (PDF)
+						</Button>
 					</div>
 				</div>
 
-				{/* System Summary Banner matching Screenshots 12 & 13 */}
-				<div className="bg-white border border-slate-200/90 rounded-lg p-5 shadow-xs">
+				{/* System Summary Banner */}
+				<Card className="p-5">
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
 						<div>
 							<span className="text-[10px] text-slate-400 font-medium block">Installation</span>
@@ -212,7 +215,7 @@ const ReportsPage = () => {
 
 						<div>
 							<span className="text-[10px] text-slate-400 font-medium block">Installed Capacity</span>
-							<strong className="text-slate-900 font-bold block mt-0.5">
+							<strong className="text-slate-900 font-bold block mt-0.5 font-tabular">
 								{selectedSite?.systemCapacity ? `${selectedSite.systemCapacity} kWp Rated` : "5 kWp Rated"}
 							</strong>
 							<span className="text-slate-500 text-[11px]">
@@ -222,16 +225,16 @@ const ReportsPage = () => {
 
 						<div>
 							<span className="text-[10px] text-slate-400 font-medium block">YTD Electricity Savings</span>
-							<strong className="text-emerald-600 font-extrabold text-sm block mt-0.5">
+							<strong className="text-emerald-600 font-extrabold text-sm block mt-0.5 font-tabular">
 								₹{ytdBill.toLocaleString("en-IN")}
 							</strong>
 							<span className="text-slate-500 text-[11px]">Tariff: ₹7.50 / kWh net meter rate</span>
 						</div>
 					</div>
-				</div>
+				</Card>
 
 				{/* Monthly Production Reconciliation Ledger (2026) Table */}
-				<div className="bg-white border border-slate-200/90 rounded-lg shadow-xs overflow-hidden">
+				<Card className="overflow-hidden">
 					<div className="px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
 						<div>
 							<h2 className="text-xs font-bold text-slate-900">Monthly Production Reconciliation Ledger (2026)</h2>
@@ -241,9 +244,9 @@ const ReportsPage = () => {
 									: "Awaiting live inverter telemetry (Inverter ID: PENDING_INVERTER_ID). Target projections shown."}
 							</p>
 						</div>
-						<span className="text-[11px] font-mono text-slate-500 bg-slate-50 px-2.5 py-1 rounded border border-slate-200">
-							Feed-In Grid Rate: <strong className="text-slate-800">₹7.50 / kWh</strong>
-						</span>
+						<Badge variant="emerald" size="sm">
+							Feed-In Grid Rate: ₹7.50 / kWh
+						</Badge>
 					</div>
 
 					<div className="overflow-x-auto">
@@ -329,7 +332,7 @@ const ReportsPage = () => {
 							</tbody>
 						</table>
 					</div>
-				</div>
+				</Card>
 			</div>
 		</Layout>
 	);

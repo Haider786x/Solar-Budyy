@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import Layout from "../components/layout/Layout";
+import Card, { CardHeader } from "../components/ui/Card";
+import Badge from "../components/ui/Badge";
+import Button from "../components/ui/Button";
 import { useAuth } from "../context/AuthContext";
 import { useDemo } from "../context/DemoContext";
 import {
@@ -194,6 +197,7 @@ const EnergyPage = () => {
 	const expectedKwh = isDemoActive ? (demoTelemetry?.predictedDailyKwh ?? +(cap * 4.88).toFixed(1)) : +(cap * 4.88).toFixed(1);
 	const diffKwh = isOutage ? -expectedKwh : +(actualKwh - expectedKwh).toFixed(1);
 	const diffPct = isOutage ? "-100%" : `${((diffKwh / expectedKwh) * 100).toFixed(1)}%`;
+	const perfRatio = expectedKwh > 0 ? Math.min(100, Math.max(0, (actualKwh / expectedKwh) * 100)).toFixed(1) : "0.0";
 
 	return (
 		<Layout>
@@ -211,15 +215,15 @@ const EnergyPage = () => {
 						</h1>
 					</div>
 
-					<button
-						type="button"
+					<Button
+						variant="primary"
+						size="sm"
 						onClick={handleRefresh}
-						disabled={refreshing}
-						className="bg-[#2563EB] hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md text-xs flex items-center gap-1.5 shadow-xs transition-colors self-start sm:self-auto"
+						loading={refreshing}
+						icon={RefreshCw}
 					>
-						<RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} />
 						Refresh Prediction
-					</button>
+					</Button>
 				</div>
 
 				{notification && (
@@ -231,10 +235,10 @@ const EnergyPage = () => {
 
 				{/* 4 KPI Metric Strip Cards */}
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<div className="text-xs text-slate-500 font-medium">Actual Production</div>
 						<div className="flex items-baseline gap-1 mt-2">
-							<span className={`text-3xl font-extrabold tracking-tight ${isOutage ? "text-rose-600" : isPendingHardware ? "text-slate-800" : "text-emerald-600"}`}>
+							<span className={`text-3xl font-extrabold tracking-tight font-tabular ${isOutage ? "text-rose-600" : isPendingHardware ? "text-slate-800" : "text-emerald-600"}`}>
 								{actualKwh}
 							</span>
 							<span className="text-sm font-semibold text-slate-500">kWh</span>
@@ -244,35 +248,35 @@ const EnergyPage = () => {
 								? "Offline"
 								: "Recorded generation today"}
 						</div>
-					</div>
+					</Card>
 
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<div className="text-xs text-slate-500 font-medium">Expected Production</div>
 						<div className="flex items-baseline gap-1 mt-2">
-							<span className="text-3xl font-extrabold text-blue-600 tracking-tight">{expectedKwh}</span>
+							<span className="text-3xl font-extrabold text-blue-600 tracking-tight font-tabular">{expectedKwh}</span>
 							<span className="text-sm font-semibold text-slate-500">kWh</span>
 						</div>
 						<div className="text-[11px] text-slate-400 mt-2">
 							Target for today's weather conditions
 						</div>
-					</div>
+					</Card>
 
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<div className="text-xs text-slate-500 font-medium">Production Difference</div>
 						<div className="flex items-baseline gap-2 mt-2">
-							<span className={`text-3xl font-extrabold tracking-tight ${isOutage ? "text-rose-600" : isPendingHardware ? "text-slate-600" : "text-emerald-600"}`}>
+							<span className={`text-3xl font-extrabold tracking-tight font-tabular ${isOutage ? "text-rose-600" : isPendingHardware ? "text-slate-600" : "text-emerald-600"}`}>
 								{diffKwh}
 							</span>
-							<span className="text-sm font-semibold text-slate-500">kWh ({diffPct})</span>
+							<span className="text-sm font-semibold text-slate-500 font-tabular">kWh ({diffPct})</span>
 						</div>
 						<div className="text-[11px] text-slate-400 mt-2">
 							{isOutage
 								? "Severe generation deficit detected"
 								: "Operating within nominal weather tolerance"}
 						</div>
-					</div>
+					</Card>
 
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="p-4">
 						<div className="text-xs text-slate-500 font-medium">System Performance</div>
 						<div className="flex items-center gap-2 mt-2.5">
 							{isOutage ? (
@@ -284,14 +288,14 @@ const EnergyPage = () => {
 								{isOutage ? "Outage Detected" : "Optimal Performance"}
 							</span>
 						</div>
-						<div className={`text-[11px] mt-2 font-medium ${isOutage ? "text-rose-600" : "text-emerald-600"}`}>
-							{isOutage ? "0% Generation Efficiency" : "98.2% Context Performance Ratio"}
+						<div className={`text-[11px] mt-2 font-medium font-tabular ${isOutage ? "text-rose-600" : "text-emerald-600"}`}>
+							{isOutage ? "0% Generation Efficiency" : `${perfRatio}% Performance Ratio`}
 						</div>
-					</div>
+					</Card>
 				</div>
 
 				{/* Hourly Production Comparison Chart */}
-				<div className="bg-white border border-slate-200/90 rounded-lg p-5 shadow-xs">
+				<Card className="p-5">
 					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2">
 						<div>
 							<h2 className="text-sm font-bold text-slate-900">Hourly Production Comparison</h2>
@@ -329,7 +333,7 @@ const EnergyPage = () => {
 									domain={[0, +(cap * 0.8).toFixed(1)]}
 								/>
 								<Tooltip
-									contentStyle={{ backgroundColor: "#1E293B", border: "none", borderRadius: "6px", color: "#FFF", fontSize: "11px" }}
+									contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.06)", color: "#1E293B", fontSize: "12px", fontFamily: "Inter, sans-serif" }}
 								/>
 								<Area
 									type="monotone"
@@ -346,15 +350,16 @@ const EnergyPage = () => {
 									name="Expected Production"
 									stroke="#2563EB"
 									strokeWidth={2}
+									strokeDasharray="4 4"
 									dot={false}
 								/>
 							</AreaChart>
 						</ResponsiveContainer>
 					</div>
-				</div>
+				</Card>
 
 				{/* Collapsible Accordion: Advanced Technical Physics Parameters (Level 2 Details) */}
-				<div className="bg-white border border-slate-200/90 rounded-lg shadow-xs overflow-hidden">
+				<Card className="overflow-hidden">
 					<button
 						type="button"
 						onClick={() => setAccordionOpen(!accordionOpen)}
@@ -390,19 +395,19 @@ const EnergyPage = () => {
 							</div>
 						</div>
 					)}
-				</div>
+				</Card>
 
 				{/* Two Bottom Panels: 7-Day Forecast & Daily Energy History */}
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-					<div className="lg:col-span-5 bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="lg:col-span-5 p-4">
 						<div className="flex items-center justify-between pb-2 border-b border-slate-100">
 							<div>
 								<h2 className="text-xs font-bold text-slate-900">7-Day Solar Production Forecast</h2>
 								<p className="text-[10px] text-slate-400">Predicted daily output based on upcoming weather forecast.</p>
 							</div>
-							<span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+							<Badge variant="blue" size="sm">
 								Open-Meteo
-							</span>
+							</Badge>
 						</div>
 
 						<div className="divide-y divide-slate-100 text-xs mt-1">
@@ -422,15 +427,15 @@ const EnergyPage = () => {
 								</div>
 							))}
 						</div>
-					</div>
+					</Card>
 
-					<div className="lg:col-span-7 bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
+					<Card className="lg:col-span-7 p-4">
 						<div className="flex items-center justify-between pb-2 border-b border-slate-100">
 							<div>
 								<h2 className="text-xs font-bold text-slate-900">Daily Energy History</h2>
 								<p className="text-[10px] text-slate-400">Actual generation versus expected target over the past 10 days.</p>
 							</div>
-							<span className="text-[10px] font-semibold text-slate-500">Past 10 Days</span>
+							<Badge variant="slate" size="sm">Past 10 Days</Badge>
 						</div>
 
 						<div className="overflow-x-auto mt-1">
@@ -458,7 +463,7 @@ const EnergyPage = () => {
 								</tbody>
 							</table>
 						</div>
-					</div>
+					</Card>
 				</div>
 			</div>
 		</Layout>
