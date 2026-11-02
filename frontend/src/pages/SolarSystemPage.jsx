@@ -23,7 +23,8 @@ import {
 	Check,
 	Save,
 	X,
-	AlertCircle
+	AlertCircle,
+	Sparkles
 } from "lucide-react";
 
 const SolarSystemPage = () => {
