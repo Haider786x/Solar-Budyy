@@ -1,0 +1,17 @@
+{
+  "timestamp": "2026-10-31T13-16-31-479Z",
+  "collections": {
+    "userdatas": 4,
+    "site_daily_performance": 0,
+    "soic_alerts": 1,
+    "soic_pipeline_runs": 9,
+    "monthlydatas": 9,
+    "soic_site_monitoring_states": 0,
+    "soic_operational_metrics": 2,
+    "user_monthly_production": 40,
+    "accounts": 6,
+    "dailypredictions": 41,
+    "positiveproductionemaillogs": 0,
+    "soic_alert_history": 0
+  }
+}

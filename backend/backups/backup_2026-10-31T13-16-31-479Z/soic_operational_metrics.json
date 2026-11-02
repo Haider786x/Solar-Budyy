@@ -1,0 +1,31 @@
+[
+  {
+    "_id": "6aafec2cb1d2734cda83c161",
+    "key": "scheduler_status",
+    "__v": 0,
+    "updated_at": "2026-10-31T13:05:19.366Z",
+    "value": {
+      "daily_prediction_scheduler": "RUNNING",
+      "alert_scheduler": "PIPELINE_GATED",
+      "soic_performance_scheduler": "PIPELINE_GATED",
+      "timezone": "Asia/Kolkata",
+      "at": "2026-10-31T13:05:19.366Z"
+    }
+  },
+  {
+    "_id": "6aafedcbb1d2734cda83c329",
+    "key": "last_manual_fetch",
+    "__v": 0,
+    "updated_at": "2026-10-31T13:00:58.741Z",
+    "value": {
+      "pipeline_id": "manual-fetch-2026-10-31T13:00:57.403Z-afda9b90-a0c7-4af5-8b44-09ee404d861e",
+      "business_date": "2026-10-31",
+      "at": "2026-10-31T13:00:58.741Z",
+      "userId": "6aafed432204dd7a11df589d",
+      "stored": 0,
+      "updated": 1,
+      "skipped": 0,
+      "failed": 0
+    }
+  }
+]

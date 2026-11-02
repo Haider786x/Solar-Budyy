@@ -1,0 +1,40 @@
+const mongoose = require("mongoose");
+
+const userDataSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    location: {
+        latitude: { type: Number, required: true },
+        longitude: { type: Number, required: true }
+    },
+    email: { type: String, required: true },
+    phoneNumber: { type: String, required: true },
+    siteId: { type: String, default: "", trim: true },
+    inverterSerialNumber: { type: String, default: "", trim: true },
+    systemCapacity: { type: Number, required: true },
+    numberOfPanels: {
+        type: Number,
+        required: true,
+        validate: {
+            validator: Number.isInteger,
+            message: "numberOfPanels must be an integer"
+        }
+    },
+    tiltDeg: { type: Number, required: true },
+    azimuthDeg: { type: Number, required: true },
+    shadingFactor: { type: Number, default: 0.95 },
+    soilingLossPercent: { type: Number, required: true },
+    inverterLossPercent: { type: Number, required: true },
+    wiringLossPercent: { type: Number, required: true },
+    miscLossPercent: { type: Number, required: true },
+    dc_ac_ratio: { type: Number, default: 1.2 },
+    inv_efficiency: { type: Number, default: 98 },
+    bifaciality: { type: Number, default: 0 },
+    ownerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Account",
+        default: null,
+        index: true
+    }
+});
+
+module.exports = mongoose.model("UserData", userDataSchema);

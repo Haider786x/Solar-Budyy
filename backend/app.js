@@ -1,0 +1,58 @@
+const express = require("express");
+const dotenv = require("dotenv");
+const path = require("path");
+
+dotenv.config({ path: path.join(__dirname, ".env") });
+
+const authRoute = require("./routes/auth.route");
+const userDataRoute = require("./routes/userData.route");
+const dailyPredictionRoute = require("./routes/dailyPrediction.route");
+const soicAlertsRoute = require("./routes/soicAlerts.route");
+const positiveProductionEmailRoute = require("./routes/positiveProductionEmail.route");
+const demoRoute = require("./routes/demo.route");
+const { initializeDailyPredictionScheduler } = require("./services/dailyPredictionScheduler");
+const { syncAllHistoricalMonthlyProduction } = require("./services/monthlyProductionService");
+
+require("./services/db");
+
+const app = express();
+app.use(express.json());
+app.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+	res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+
+	if (req.method === "OPTIONS") {
+		return res.sendStatus(204);
+	}
+
+	next();
+});
+
+app.use("/auth", authRoute);
+app.use("/", userDataRoute);
+app.use("/users", dailyPredictionRoute);
+app.use("/soic", soicAlertsRoute);
+app.use("/notifications", positiveProductionEmailRoute);
+app.use("/api/demo", demoRoute);
+
+app.get("/", (req, res) => {
+	res.send("Backend running");
+});
+
+const PORT = process.env.PORT || 5000;
+
+if (require.main === module) {
+	app.listen(PORT, () => {
+		console.log(`Server running on port ${PORT}`);
+
+		if (process.env.DAILY_PREDICTION_SCHEDULER_DISABLED !== "true") {
+			initializeDailyPredictionScheduler();
+		}
+
+		// Trigger historical sync on startup
+		syncAllHistoricalMonthlyProduction();
+	});
+}
+
+module.exports = app;

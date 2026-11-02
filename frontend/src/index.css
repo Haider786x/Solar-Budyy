@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+	--font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	--font-heading: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+	/* SolarWizer Professional Palette */
+	--sw-white: #FFFFFF;
+	--sw-bg: #F0F7FF;
+	--sw-blue: #3574E3;
+	--sw-blue-hover: #295FBE;
+	--sw-blue-light: #DCEBFA;
+	--sw-text: #1F2937;
+	--sw-muted: #64748B;
+	--sw-border: #E2E8F0;
+	--sw-healthy: #16A34A;
+	--sw-warning: #D97706;
+	--sw-attention: #DC2626;
+}
+
+html,
+body,
+#root {
+	min-height: 100%;
+}
+
+body {
+	font-family: var(--font-body);
+	background-color: var(--sw-bg);
+	color: var(--sw-text);
+	letter-spacing: -0.011em;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+th {
+	font-family: var(--font-heading);
+}
+
+th,
+td,
+strong,
+svg text {
+	font-variant-numeric: tabular-nums;
+}
+
+svg text {
+	font-family: var(--font-body);
+}

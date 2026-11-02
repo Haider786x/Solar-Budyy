@@ -1,0 +1,74 @@
+[
+  {
+    "_id": "6aaffd99e5430200d4006792",
+    "name": "SolarBuddy Administrator",
+    "email": "admin@solarbuddy.internal",
+    "passwordHash": "$2b$10$oR2nrb8nMKUxPJJlkCz3BulTTmVyP..jfumIFUzJUWGdEJ..oIXDe",
+    "role": "admin",
+    "siteId": null,
+    "isActive": true,
+    "createdAt": "2026-09-20T15:36:57.595Z",
+    "updatedAt": "2026-09-20T15:36:57.595Z",
+    "__v": 0
+  },
+  {
+    "_id": "6aaffd99e5430200d4006793",
+    "name": "Mohammad Haider",
+    "email": "lordxgrimx786@gmail.com",
+    "passwordHash": "$2b$10$j7.3U8A/VjeQBl/6GUBioefxFKiUdRPWgOQdvbiV0suPzQQW0hn7i",
+    "role": "user",
+    "siteId": "6aafed432204dd7a11df589d",
+    "isActive": true,
+    "createdAt": "2026-09-20T15:36:57.786Z",
+    "updatedAt": "2026-09-20T15:36:57.786Z",
+    "__v": 0
+  },
+  {
+    "_id": "6aaffeed8eb2171131668afd",
+    "name": "Alice Tester",
+    "email": "test_1789918956107@solarbuddy.test",
+    "passwordHash": "$2b$10$wrmieduSOVfkeTXcgpMy7.ndUJYAPDUQUdty5DUO9iDhZ9U4Xwyr6",
+    "role": "user",
+    "siteId": null,
+    "isActive": true,
+    "createdAt": "2026-09-20T15:42:37.102Z",
+    "updatedAt": "2026-09-20T15:42:37.102Z",
+    "__v": 0
+  },
+  {
+    "_id": "6ae5e1d2de40faaf8193a109",
+    "name": "Delhi Tech Park Facilities",
+    "email": "facilities@delhitech.in",
+    "passwordHash": "$2b$10$K3P8d1XelOr2xn.hx3drBuqVnQ9LkBMUPykFDckOGpq7Kl50wqXsK",
+    "role": "user",
+    "siteId": "6ae5e1d2de40faaf8193a10a",
+    "isActive": true,
+    "createdAt": "2026-10-31T12:40:50.113Z",
+    "updatedAt": "2026-10-31T12:40:50.379Z",
+    "__v": 0
+  },
+  {
+    "_id": "6ae5e1d2de40faaf8193a10b",
+    "name": "Bangalore Green Energy Group",
+    "email": "green@bangalorecampus.org",
+    "passwordHash": "$2b$10$K3P8d1XelOr2xn.hx3drBuqVnQ9LkBMUPykFDckOGpq7Kl50wqXsK",
+    "role": "user",
+    "siteId": "6ae5e1d2de40faaf8193a10c",
+    "isActive": true,
+    "createdAt": "2026-10-31T12:40:50.479Z",
+    "updatedAt": "2026-10-31T12:40:50.601Z",
+    "__v": 0
+  },
+  {
+    "_id": "6ae5e1d2de40faaf8193a10d",
+    "name": "Rajasthan Solar Operations",
+    "email": "ops@rajasthansolar.co",
+    "passwordHash": "$2b$10$K3P8d1XelOr2xn.hx3drBuqVnQ9LkBMUPykFDckOGpq7Kl50wqXsK",
+    "role": "user",
+    "siteId": "6ae5e1d2de40faaf8193a10e",
+    "isActive": true,
+    "createdAt": "2026-10-31T12:40:50.671Z",
+    "updatedAt": "2026-10-31T12:40:50.779Z",
+    "__v": 0
+  }
+]

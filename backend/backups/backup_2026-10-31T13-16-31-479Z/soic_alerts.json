@@ -1,0 +1,21 @@
+[
+  {
+    "_id": "6ae5e1d2de40faaf8193a10f",
+    "user_id": "6ae5e1d2de40faaf8193a10e",
+    "site_id": "SITE-JPR-04",
+    "site_name": "Jaipur Solar Farm West",
+    "severity": "CRITICAL",
+    "status": "ACKNOWLEDGED",
+    "predicted_kwh": 245,
+    "actual_kwh": 0,
+    "difference_kwh": -245,
+    "performance_percent": 1.5,
+    "consecutive_days": 1,
+    "notes": "String 2 open circuit failure & inverter MPPT lockout. Daytime output flatlined.",
+    "resolved_at": null,
+    "resolved_by": "",
+    "created_at": "2026-10-31T12:40:50.860Z",
+    "updated_at": "2026-10-31T12:40:50.860Z",
+    "__v": 0
+  }
+]
