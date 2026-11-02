@@ -141,13 +141,15 @@ Protected frontend files:
   - [x] Verified production build passes with 0 errors (built in 989ms)
   - [x] Commit Phase 3
 
-- [ ] **Phase 4: Overview Page Refinement**
-  - [ ] Establish hero today's generation KPI with tabular numbers
-  - [ ] Subordinate secondary metrics into clean divider row
-  - [ ] Refine production area chart (solid actual, dashed expected, hairline grid)
-  - [ ] Clean up environmental and site panels
-  - [ ] Verify Demo vs Physical telemetry labeling
-  - [ ] Commit Phase 4
+- [x] **Phase 4: Overview Page Refinement**
+  - [x] Established hero today's generation KPI with tabular numbers and target comparison
+  - [x] Refined production area chart (solid actual, dashed expected target line, subtle area gradient fill, light horizontal gridlines)
+  - [x] Replaced dark slate chart tooltip with clean design-token surface
+  - [x] Converted all panels (Live Power Flow, Environmental Impact, Chart, Panel Groups, Installation Details, Equipment) to unified `Card` components
+  - [x] Verified Demo Inverter Mode vs Physical telemetry labeling
+  - [x] Verified Demo Inverter Service determinism (17.11 kWh identical to Phase 0 baseline)
+  - [x] Verified production build passes with 0 errors (built in 890ms)
+  - [x] Commit Phase 4
 
 - [ ] **Phase 5: Remaining Active Pages**
   - [ ] `EnergyPage.jsx`

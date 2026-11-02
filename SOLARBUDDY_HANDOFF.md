@@ -2,8 +2,8 @@
 
 > **Role:** Single source of truth for engineering state, checkpointing, and agent continuation.  
 > **Repository:** `D:\webdev\project\minor project\Solar Budyy`  
-> **Current Phase:** Phase 3 (Design System) — **COMPLETED** | Next: Phase 4 (Overview Page)  
-> **Branch:** `main` | **HEAD:** `f1f9d38` (*Phase 2: standardize SolarBuddy branding, --sb-* design tokens, and empty registration defaults*)  
+> **Current Phase:** Phase 4 (Overview Page) — **COMPLETED** | Next: Phase 5 (Remaining Active Pages)  
+> **Branch:** `main` | **HEAD:** `f6a9635` (*Phase 3: establish accessible design system components and integrate into Overview page*)  
 > **Rollback Points:**  
 > - Branch: `rollback-phase0-baseline` (`d8ddae7`)  
 > - Tag: `phase0-solis-initial` (`f2631a0`)  
@@ -118,16 +118,20 @@ All commands executed and outputs verified:
 | 2026-11-02 19:23 | Phase 0 Baseline Complete | `SolarBuddy_UI_Refinement_Context.md`, `SOLARBUDDY_HANDOFF.md` | Full recovery audit, baseline tests logged, rollback points established | **Phase 0 ACCEPTED** |
 | 2026-11-02 19:27 | Phase 1 Solis Verified | `test_solis_suite.js`, `SOLARBUDDY_HANDOFF.md`, `SolarBuddy_UI_Refinement_Context.md` | 12/12 Solis authorization, response styles, and tool tests passed | **Phase 1 ACCEPTED** (Commit `fe0116a`) |
 | 2026-11-02 19:48 | Phase 2 Branding Complete | 11 files (see git diff) | Standardized SolarBuddy (0 legacy names), `--sb-*` tokens (0 `--sw-`), empty register defaults, Lucide icons | **Phase 2 ACCEPTED** (Commit `f1f9d38`) |
-| 2026-11-02 19:56 | Phase 3 Design System Complete | 8 files (7 UI components + `OverviewPage.jsx`) | Built Button, Card, Badge, StatBlock, Modal, Toast, Skeleton; integrated Card/Badge into Overview | **Phase 3 ACCEPTED** |
+| 2026-11-02 19:56 | Phase 3 Design System Complete | 8 files (7 UI components + `OverviewPage.jsx`) | Built Button, Card, Badge, StatBlock, Modal, Toast, Skeleton; integrated Card/Badge into Overview | **Phase 3 ACCEPTED** (Commit `f6a9635`) |
+| 2026-11-02 19:59 | Phase 4 Overview Page Complete | `OverviewPage.jsx`, `SOLARBUDDY_HANDOFF.md`, `SolarBuddy_UI_Refinement_Context.md` | Hero generation KPI, dashed expected line, light tooltip, Card containment, verified determinism (17.11 kWh) | **Phase 4 ACCEPTED** |
 
 ---
 
-## 5. Exact Next Step: Phase 4 — Overview Page (Highest UI Priority)
+## 5. Exact Next Step: Phase 5 — Remaining Active Pages
 
-1. Establish true visual hierarchy on `OverviewPage.jsx`:
-   - Hero today's generation KPI with tabular large figures.
-   - Demote secondary metrics into clean divider row.
-   - Refine solar production curve (solid actual, dashed expected, subtle area gradient fill, light horizontal gridlines).
-   - Clean up environmental and site panels.
-   - Verify Demo Inverter vs Physical telemetry labeling.
-2. Verify production build passes and commit Phase 4.
+Refine the remaining routed pages one at a time using design system tokens (`Card`, `Badge`, `Button`, `StatBlock`):
+1. `EnergyPage.jsx`
+2. `SolarSystemPage.jsx`
+3. `AlertsPage.jsx`
+4. `SavingsPage.jsx`
+5. `ReportsPage.jsx`
+6. `InstallationsPage.jsx`
+7. `SettingsPage.jsx`
+8. `LoginPage.jsx` & `RegisterPage.jsx`
+Validate that build passes and all calculations remain untouched.

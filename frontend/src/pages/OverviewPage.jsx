@@ -562,7 +562,7 @@ const OverviewPage = () => {
 											domain={graphMode === "energy" ? [0, Math.ceil(targetToday * 1.2)] : [0, +(cap * 0.85).toFixed(1)]}
 										/>
 										<Tooltip
-											contentStyle={{ backgroundColor: "#1E293B", border: "none", borderRadius: "6px", color: "#FFF", fontSize: "11px" }}
+											contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.06)", color: "#1E293B", fontSize: "12px", fontFamily: "Inter, sans-serif" }}
 											formatter={(value, name) => [`${value} ${graphMode === "energy" ? "kWh" : "kW"}`, name]}
 										/>
 										<ReferenceLine
@@ -646,7 +646,7 @@ const OverviewPage = () => {
 										<XAxis dataKey="time" tick={{ fontSize: 9, fill: "#64748B" }} tickLine={false} />
 										<YAxis tick={{ fontSize: 9, fill: "#64748B" }} tickLine={false} unit=" kW" domain={[0, +(cap * 0.4).toFixed(1)]} />
 										<Tooltip
-											contentStyle={{ backgroundColor: "#1E293B", border: "none", borderRadius: "6px", color: "#FFF", fontSize: "11px" }}
+											contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.06)", color: "#1E293B", fontSize: "12px", fontFamily: "Inter, sans-serif" }}
 											formatter={(val, name) => [`${val} kW`, name]}
 										/>
 										<ReferenceLine
