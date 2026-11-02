@@ -121,13 +121,13 @@ Protected frontend files:
   - [x] 12 of 12 tests passed in `test_solis_suite.js`
   - [x] Commit Phase 1
 
-- [ ] **Phase 2: Branding Consistency**
-  - [ ] Global audit & replacement of `SolarWizer` and `SolarWiser` &rarr; `SolarBuddy`
-  - [ ] Audit & rename `--sw-*` &rarr; `--sb-*` across CSS and JSX callers
-  - [ ] Clear prefilled registration credentials from form defaults
-  - [ ] Replace emoji icons with Lucide React icons
-  - [ ] Simplify technical jargon in user-facing copy
-  - [ ] Commit Phase 2
+- [x] **Phase 2: Branding Consistency**
+  - [x] Global audit & replacement of `SolarWizer` and `SolarWiser` &rarr; `SolarBuddy` (0 remaining)
+  - [x] Audit & rename `--sw-*` &rarr; `--sb-*` across CSS and JSX callers (0 `--sw-` remaining)
+  - [x] Clear prefilled registration credentials from form defaults (`RegisterPage.jsx`)
+  - [x] Replace emoji icons with Lucide React icons (`Sun`, `BookOpen`, `AlertTriangle`)
+  - [x] Verified frontend build passes in 1.09s
+  - [x] Commit Phase 2
 
 - [ ] **Phase 3: Design System Components**
   - [ ] Create `Button.jsx`, `Card.jsx`, `Badge.jsx`, `StatBlock.jsx` in `frontend/src/components/ui/`

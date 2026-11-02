@@ -211,7 +211,7 @@ const UsersDashboardPage = () => {
 						S
 					</div> */}
 					<div className="px-4">
-						<p className="text-lg font-black leading-none text-slate-900">SolarWiser</p>
+						<p className="text-lg font-black leading-none text-slate-900">SolarBuddy</p>
 						<p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-slate-500">Energy Management</p>
 					</div>
 				</div>
@@ -239,7 +239,7 @@ const UsersDashboardPage = () => {
 							className="w-full rounded-xl border border-amber-200 bg-gradient-to-r from-amber-50/80 to-orange-50/80 px-3 py-2.5 text-left text-sm font-semibold text-amber-800 transition hover:bg-amber-100/50"
 							onClick={() => navigate("/soic")}
 						>
-							🚨 Alerts Monitor System
+							Alerts Monitor System
 						</button>
 					</div>
 				</nav>
@@ -263,7 +263,7 @@ const UsersDashboardPage = () => {
 				<div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
 					<div>
 						<div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 sm:text-xs">Dashboard Console</div>
-						<p className="text-sm font-bold text-slate-800 lg:hidden">SolarWizer Users</p>
+						<p className="text-sm font-bold text-slate-800 lg:hidden">SolarBuddy Users</p>
 					</div>
 					<div className="flex w-full items-center justify-end gap-3 sm:w-auto">
 						<div className="w-full rounded-full border-2 border-emerald-300/90 bg-white shadow-[0_0_0_4px_rgba(16,185,129,0.12)] transition focus-within:border-emerald-500 focus-within:shadow-[0_0_0_5px_rgba(16,185,129,0.15)]">
@@ -307,7 +307,7 @@ const UsersDashboardPage = () => {
 						className="rounded-xl border border-amber-200 bg-gradient-to-r from-amber-50/80 to-orange-50/80 px-4 py-2.5 text-sm font-semibold text-amber-800 shadow transition hover:-translate-y-0.5 hover:shadow-lg sm:col-span-2"
 						onClick={() => navigate("/soic")}
 					>
-						🚨 Alerts Monitor System
+						Alerts Monitor System
 					</button>
 				</div>
 			</div>
@@ -315,7 +315,7 @@ const UsersDashboardPage = () => {
 			<main className="px-3 py-5 sm:px-4 sm:py-6 lg:pl-[17.5rem] lg:pr-8">
 				<div className="mx-auto max-w-7xl space-y-5">
 					<section className="space-y-2">
-						<p className="inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-800">SolarWizer Dashboard</p>
+						<p className="inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-800">SolarBuddy Dashboard</p>
 						<h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl md:text-4xl">User Data Overview</h1>
 						<p className="max-w-3xl text-sm text-slate-600 sm:text-base">Choose any user to generate and view their monthly solar report from the AIML pipeline. Monitor pipeline health and user installation trends.</p>
 					</section>

@@ -54,8 +54,8 @@ const SiteLocationMap = ({
 		marker.bindPopup(
 			`<div style="font-family: ui-sans-serif, system-ui, sans-serif; min-width: 170px;">
 				<div style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 2px;">${siteName}</div>
-				<div style="font-size: 11px; color: #475569; margin-bottom: 3px;">📍 ${locationName}</div>
-				<div style="font-size: 11px; color: #2563eb; font-weight: 600;">⚡ ${capacity} kWp Monocrystalline</div>
+				<div style="font-size: 11px; color: #475569; margin-bottom: 3px;">${locationName}</div>
+				<div style="font-size: 11px; color: #2563eb; font-weight: 600;">Capacity: ${capacity} kWp Monocrystalline</div>
 				<div style="font-size: 10px; color: #64748b; font-family: monospace; margin-top: 2px;">${latNum.toFixed(4)}°N, ${lngNum.toFixed(4)}°E</div>
 			</div>`
 		);

@@ -661,7 +661,7 @@ const SOICDashboard = () => {
 						className="w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow transition hover:-translate-y-0.5 hover:shadow-lg"
 						onClick={() => navigate("/")}
 					>
-						Exit to SolarWizer
+						Exit to SolarBuddy
 					</button>
 				</div>
 			</aside>

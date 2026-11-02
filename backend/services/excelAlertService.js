@@ -45,7 +45,7 @@ const buildSummarySheet = (wb, siteName, startDate, endDate, historyMetrics, act
 
 	ws.mergeCells("A1:F1");
 	const logoCell = ws.getCell("A1");
-	logoCell.value = "SolarWizer";
+	logoCell.value = "SolarBuddy";
 	logoCell.fill = solidFill(C.brandDark);
 	logoCell.font = { bold: true, size: 22, color: { argb: C.white }, name: "Calibri" };
 	logoCell.alignment = { vertical: "middle", horizontal: "center" };
@@ -253,7 +253,7 @@ const buildPerformanceEvidenceSheet = (wb, activeAlerts, history) => {
 
 const buildAlertReportWorkbook = (siteName, startDate, endDate, historyMetrics, activeMetrics, history, activeAlerts) => {
 	const wb = new ExcelJS.Workbook();
-	wb.creator = "SolarWizer";
+	wb.creator = "SolarBuddy";
 	wb.created = new Date();
 	wb.modified = new Date();
 

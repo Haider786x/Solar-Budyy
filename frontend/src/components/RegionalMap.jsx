@@ -74,8 +74,8 @@ const RegionalMap = ({ users = [], onSelectSite }) => {
 			marker.bindPopup(
 				`<div style="min-width:180px; font-family: ui-sans-serif, system-ui, sans-serif;">
 					<div style="font-weight:700;font-size:13px;color:#0f172a;margin-bottom:3px">${name}</div>
-					<div style="font-size:11px;color:#475569;margin-bottom:2px">📍 ${locationStr}</div>
-					<div style="font-size:11px;color:#2563eb;font-weight:600;margin-bottom:4px">⚡ Rated: <strong>${cap} kWp</strong></div>
+					<div style="font-size:11px;color:#475569;margin-bottom:2px">${locationStr}</div>
+					<div style="font-size:11px;color:#2563eb;font-weight:600;margin-bottom:4px">Rated: <strong>${cap} kWp</strong></div>
 					<div style="font-size:10px;color:#64748b;font-family:monospace">${lat.toFixed(4)}°N, ${lng.toFixed(4)}°E</div>
 				</div>`,
 				{ maxWidth: 240 }

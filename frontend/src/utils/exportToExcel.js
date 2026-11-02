@@ -256,7 +256,7 @@ function buildSingleSheet(wb, report, user, options = {}) {
 
 	ws.mergeCells("A1:F1");
 	const logoCell = ws.getCell("A1");
-	logoCell.value = "SolarWiser";
+	logoCell.value = "SolarBuddy";
 	logoCell.fill = solidFill(C.brandDark);
 	logoCell.font = { bold: true, size: 22, color: { argb: C.white }, name: "Calibri" };
 	logoCell.alignment = { vertical: "middle", horizontal: "center" };
@@ -327,7 +327,7 @@ function buildSingleSheet(wb, report, user, options = {}) {
 
 	ws.mergeCells(`A${r}:F${r}`);
 	const footerCell = ws.getCell(`A${r}`);
-	footerCell.value = "SolarWiser - Confidential Report";
+	footerCell.value = "SolarBuddy - Confidential Report";
 	footerCell.fill = solidFill(C.brandDark);
 	footerCell.font = { italic: true, size: 9, color: { argb: C.white } };
 	footerCell.alignment = { horizontal: "center", vertical: "middle" };
@@ -336,7 +336,7 @@ function buildSingleSheet(wb, report, user, options = {}) {
 
 export const exportReportToExcel = async (report, user, options = {}) => {
 	const wb = new ExcelJS.Workbook();
-	wb.creator = "SolarWiser";
+	wb.creator = "SolarBuddy";
 	wb.created = new Date();
 	wb.modified = new Date();
 

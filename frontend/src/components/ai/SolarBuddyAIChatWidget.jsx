@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useDemo } from "../../context/DemoContext";
 import { streamAIChatMessage, sendAIChatMessage } from "../../services/api";
 import {
+	BookOpen,
 	X,
 	Send,
 	Trash2,
@@ -223,7 +224,7 @@ function SourceDetail({ toolExecutionSteps = [], retrievedKnowledgePassages = []
 					))}
 					{retrievedKnowledgePassages.map((p, i) => (
 						<div key={i} className="text-[10px] text-slate-500">
-							📚 {p.title}
+							<span className="flex items-center gap-1"><BookOpen className="w-2.5 h-2.5 text-blue-500" />{p.title}</span>
 						</div>
 					))}
 				</div>

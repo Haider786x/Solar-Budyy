@@ -25,11 +25,11 @@ const RegisterPage = () => {
 
 	// Step 1: Account Info
 	const [accountType, setAccountType] = useState("customer"); // 'customer' | 'admin'
-	const [fullName, setFullName] = useState(accountType === "admin" ? "Haider-admin" : "Haider (Home)");
-	const [email, setEmail] = useState(accountType === "admin" ? "admin@solarbuddy.internal" : "lordxgrimx786@gmail.com");
-	const [phone, setPhone] = useState("+91 8933827478");
-	const [password, setPassword] = useState("SolarBuddy2026!");
-	const [confirmPassword, setConfirmPassword] = useState("SolarBuddy2026!");
+	const [fullName, setFullName] = useState("");
+	const [email, setEmail] = useState("");
+	const [phone, setPhone] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
 
 	// Step 2: System Geometry & Location
 	const [installationName, setInstallationName] = useState("Haider (Home)");
@@ -47,13 +47,6 @@ const RegisterPage = () => {
 
 	const handleAccountTypeChange = (type) => {
 		setAccountType(type);
-		if (type === "admin") {
-			setFullName("Fleet Operations Admin");
-			setEmail("admin@solarbuddy.internal");
-		} else {
-			setFullName("Mohammad Haider");
-			setEmail("lordxgrimx786@gmail.com");
-		}
 	};
 
 	const handlePresetSelect = (preset) => {

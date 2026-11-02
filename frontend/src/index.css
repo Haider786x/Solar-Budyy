@@ -4,18 +4,23 @@
 	--font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 	--font-heading: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-	/* SolarWizer Professional Palette */
-	--sw-white: #FFFFFF;
-	--sw-bg: #F0F7FF;
-	--sw-blue: #3574E3;
-	--sw-blue-hover: #295FBE;
-	--sw-blue-light: #DCEBFA;
-	--sw-text: #1F2937;
-	--sw-muted: #64748B;
-	--sw-border: #E2E8F0;
-	--sw-healthy: #16A34A;
-	--sw-warning: #D97706;
-	--sw-attention: #DC2626;
+	/* SolarBuddy Design Tokens */
+	--sb-navy: #0F172A;
+	--sb-blue: #2563EB;
+	--sb-blue-hover: #1D4ED8;
+	--sb-blue-light: #DBEAFE;
+	--sb-amber: #D97706;
+	--sb-green: #16A34A;
+	--sb-red: #DC2626;
+	--sb-bg: #F4F7FB;
+	--sb-surface: #FFFFFF;
+	--sb-border: #E2E8F0;
+	--sb-text: #1E293B;
+	--sb-muted: #64748B;
+	--sb-white: #FFFFFF;
+	--sb-healthy: #16A34A;
+	--sb-warning: #D97706;
+	--sb-attention: #DC2626;
 }
 
 html,
@@ -26,8 +31,8 @@ body,
 
 body {
 	font-family: var(--font-body);
-	background-color: var(--sw-bg);
-	color: var(--sw-text);
+	background-color: var(--sb-bg);
+	color: var(--sb-text);
 	letter-spacing: -0.011em;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;

@@ -371,9 +371,7 @@ const SolarSystemPage = () => {
 										style={{ transform: `rotate(${solarPosition.azimuth - 180}deg)` }}
 										title={`Sun Azimuth: ${solarPosition.azimuth}°`}
 									>
-										<div className="w-3.5 h-3.5 -mt-1 rounded-full bg-amber-400 border border-amber-600 shadow-sm flex items-center justify-center text-[8px]">
-											☀️
-										</div>
+										<div className="w-3.5 h-3.5 -mt-1 rounded-full bg-amber-400 border border-amber-600 shadow-sm flex items-center justify-center"><Sun className="w-2.5 h-2.5 text-amber-900" /></div>
 										<div className="w-1 h-12 bg-amber-500 rounded-t shadow-xs"></div>
 									</div>
 

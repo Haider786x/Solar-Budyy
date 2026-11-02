@@ -50,7 +50,7 @@ const buildEmailContent = ({ user, prediction, monthlyTarget }) => {
 		targetLine,
 		"",
 		"Keep enjoying the sunshine,",
-		"SolarWizer"
+		"SolarBuddy"
 	].join("\n");
 
 	const html = `
@@ -63,7 +63,7 @@ const buildEmailContent = ({ user, prediction, monthlyTarget }) => {
 				<li>Extra production: <strong>${differenceKwh} kWh</strong></li>
 			</ul>
 			<p>${escapeHtml(targetLine)}</p>
-			<p>Keep enjoying the sunshine,<br/>SolarWizer</p>
+			<p>Keep enjoying the sunshine,<br/>SolarBuddy</p>
 		</div>
 	`;
 
