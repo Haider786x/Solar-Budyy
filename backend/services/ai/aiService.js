@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const UserData = require("../../models/data");
 const { buildSystemPromptWithContext } = require("./systemPrompt");
 const { searchKnowledge } = require("./solarKnowledgeService");
@@ -26,12 +27,24 @@ class AIService {
 
 		// Resolve authorized site context
 		let targetSiteId = siteId;
-		if (user.role !== "admin" || !targetSiteId) {
-			targetSiteId = user.siteId;
+		if (user.role === "admin") {
+			targetSiteId = siteId || user.siteId;
+		} else {
+			// Normal customer: strictly locked to own site or sites they own
+			if (targetSiteId && mongoose.Types.ObjectId.isValid(targetSiteId)) {
+				const owned = await UserData.findOne({ _id: targetSiteId, ownerId: user.id });
+				if (owned) {
+					targetSiteId = owned._id.toString();
+				} else {
+					targetSiteId = user.siteId;
+				}
+			} else {
+				targetSiteId = user.siteId;
+			}
 		}
 
 		let site = null;
-		if (targetSiteId) {
+		if (targetSiteId && mongoose.Types.ObjectId.isValid(targetSiteId)) {
 			site = await UserData.findById(targetSiteId).lean();
 		}
 		if (!site) {
@@ -75,7 +88,7 @@ class AIService {
 				model: result.model,
 				isLocalFallback: result.provider === "local_operations_engine",
 				siteId: site?._id?.toString(),
-				siteName: site?.name || "Haider Rooftop Solar Array",
+				siteName: site?.name || "Selected Solar Site",
 				toolExecutionSteps: result.toolExecutionSteps || [],
 				retrievedKnowledgePassages: relevantPassages.map((p) => ({ id: p.id, title: p.title, topic: p.topic })),
 				timestamp: new Date().toISOString()

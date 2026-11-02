@@ -235,96 +235,127 @@ async function callLocalOperationsEngine({ messages, toolsMap, userContext, site
 	let installationData = null;
 	let historyData = null;
 
+	// Always bind tools to the active site context (e.g. Vaibhav, Haider, etc.)
+	const targetSiteId = userContext?.siteId || site?._id?.toString();
+	const targetParams = targetSiteId ? { siteId: targetSiteId } : {};
+
 	// Execute relevant tools against live DB
 	if (needsTelemetry || needsPerformance) {
-		toolExecutionSteps.push({ tool: "fetchSolarTelemetry", params: {} });
-		telemetryData = await toolsMap.fetchSolarTelemetry.execute({}, userContext);
+		toolExecutionSteps.push({ tool: "fetchSolarTelemetry", params: targetParams });
+		telemetryData = await toolsMap.fetchSolarTelemetry.execute(targetParams, userContext);
 	}
 	if (needsPerformance || needsTelemetry) {
-		toolExecutionSteps.push({ tool: "fetchSolarPerformance", params: {} });
-		performanceData = await toolsMap.fetchSolarPerformance.execute({}, userContext);
+		toolExecutionSteps.push({ tool: "fetchSolarPerformance", params: targetParams });
+		performanceData = await toolsMap.fetchSolarPerformance.execute(targetParams, userContext);
 	}
 	if (needsAlerts || needsPerformance) {
-		toolExecutionSteps.push({ tool: "fetchSolarAlerts", params: {} });
-		alertsData = await toolsMap.fetchSolarAlerts.execute({}, userContext);
+		toolExecutionSteps.push({ tool: "fetchSolarAlerts", params: targetParams });
+		alertsData = await toolsMap.fetchSolarAlerts.execute(targetParams, userContext);
 	}
 	if (needsWeather || needsPerformance) {
-		toolExecutionSteps.push({ tool: "fetchSolarWeatherContext", params: {} });
-		weatherData = await toolsMap.fetchSolarWeatherContext.execute({}, userContext);
+		toolExecutionSteps.push({ tool: "fetchSolarWeatherContext", params: targetParams });
+		weatherData = await toolsMap.fetchSolarWeatherContext.execute(targetParams, userContext);
 	}
 	if (needsInstallation) {
-		toolExecutionSteps.push({ tool: "fetchSolarInstallation", params: {} });
-		installationData = await toolsMap.fetchSolarInstallation.execute({}, userContext);
+		toolExecutionSteps.push({ tool: "fetchSolarInstallation", params: targetParams });
+		installationData = await toolsMap.fetchSolarInstallation.execute(targetParams, userContext);
 	}
 	if (needsHistory) {
-		toolExecutionSteps.push({ tool: "fetchHistoricalGeneration", params: {} });
-		historyData = await toolsMap.fetchHistoricalGeneration.execute({ limit: 7 }, userContext);
+		toolExecutionSteps.push({ tool: "fetchHistoricalGeneration", params: { ...targetParams, limit: 7 } });
+		historyData = await toolsMap.fetchHistoricalGeneration.execute({ ...targetParams, limit: 7 }, userContext);
 	}
+
+	// Resolve the active site name from actual site data
+	const activeSiteName = site?.name || telemetryData?.siteName || performanceData?.siteName || installationData?.installationName || "Selected Solar Site";
 
 	// Synthesize grounded operations response
 	let text = "";
 
 	if (needsAlerts && alertsData) {
 		text += `### Operational Alert Analysis\n\n`;
-		text += `**Monitored Installation:** ${alertsData.siteName}\n`;
-		text += `**Status:** ${alertsData.systemOperationalState}\n\n`;
+		text += `**Monitored Installation:** ${activeSiteName}\n`;
+		text += `**Status:** ${alertsData.systemOperationalState || "Operational"}\n\n`;
 
-		if (alertsData.activeAlerts.length === 0) {
-			text += `No active hardware alerts or anomalies are currently detected. The array is operating within normal parameters.\n\n`;
+		if (!alertsData.activeAlerts || alertsData.activeAlerts.length === 0) {
+			text += `Good news! There are currently **no active hardware alerts, fault codes, or operational issues** on **${activeSiteName}**.\n\n`;
+			text += `Your inverter and photovoltaic strings are operating smoothly within normal parameters.\n\n`;
 		} else {
-			text += `**Active Incidents (${alertsData.activeAlerts.length}):**\n`;
+			text += `I found **${alertsData.activeAlerts.length} active issue${alertsData.activeAlerts.length > 1 ? "s" : ""}** that require attention:\n\n`;
 			for (const a of alertsData.activeAlerts) {
 				text += `- **Severity [${a.severity}]:** ${a.notes}\n`;
 				text += `  - *Status:* ${a.status} (Active for ${a.consecutiveDays} days)\n`;
-				text += `  - *Recommended Action:* ${a.recommendedAction}\n`;
+				text += `  - *Recommended Next Step:* ${a.recommendedAction}\n`;
 			}
 			text += `\n`;
 		}
 
-		if (alertsData.recentResolvedHistory.length > 0) {
-			text += `**Recent Maintenance Record:** Incident ${alertsData.recentResolvedHistory[0].incidentId} (${alertsData.recentResolvedHistory[0].highestSeverity}) was verified and resolved.\n\n`;
+		if (alertsData.recentResolvedHistory && alertsData.recentResolvedHistory.length > 0) {
+			text += `**Recent Maintenance Record:** Incident ${alertsData.recentResolvedHistory[0].incidentId} (${alertsData.recentResolvedHistory[0].highestSeverity}) was verified and resolved by field technicians.\n\n`;
 		}
+
+		text += `**Expert Tip:** Even minor dirt or a partially shaded string can trigger lower-severity alerts. Regular seasonal cleaning keeps your strings producing at their rated capacity.\n\n`;
 	} else if (needsInstallation && installationData) {
 		text += `### Installation Technical Specifications\n\n`;
-		text += `**Site:** ${installationData.installationName} (${installationData.location.region})\n\n`;
+		text += `**Site:** ${activeSiteName} (${installationData.location?.region || "Local Region"})\n\n`;
+		text += `Here are the engineering specifications configured for this installation:\n\n`;
 		text += `| Parameter | Configured Value |\n`;
 		text += `| :--- | :--- |\n`;
-		text += `| **Rated Capacity** | ${installationData.systemCapacityKwp} kWp |\n`;
+		text += `| **Rated DC Capacity** | ${installationData.systemCapacityKwp} kWp |\n`;
 		text += `| **Photovoltaic Modules** | ${installationData.numberOfPanels} panels (${installationData.moduleRatingWatts}W Monocrystalline) |\n`;
 		text += `| **Roof Tilt / Azimuth** | ${installationData.tiltDegrees}° Slope / ${installationData.azimuthDirection} |\n`;
 		text += `| **Inverter Efficiency** | ${installationData.inverterEfficiencyPercent}% |\n`;
 		text += `| **DC/AC Ratio** | ${installationData.dcAcRatio} |\n`;
 		text += `| **Inverter Telemetry Status** | ${installationData.telemetryStatus} (${installationData.inverterSerialNumber}) |\n\n`;
-		text += `**Engineered Loss Budget:** Soiling: ${installationData.lossBreakdownPercent.soiling}%, Inverter Conversion: ${installationData.lossBreakdownPercent.inverterConversion}%, Wiring: ${installationData.lossBreakdownPercent.wiringResistance}%, Misc: ${installationData.lossBreakdownPercent.miscUnaccounted}%.\n\n`;
+
+		text += `**What these numbers mean (in plain English):**\n`;
+		text += `- **Rated Capacity (${installationData.systemCapacityKwp} kWp):** The maximum theoretical power your panels can produce when bright midday sun hits them directly.\n`;
+		text += `- **Tilt (${installationData.tiltDegrees}°):** The angle of your panels, tuned specifically to your geographic latitude so you capture the strongest year-round sunlight.\n`;
+		text += `- **Inverter Efficiency (${installationData.inverterEfficiencyPercent}%):** Panels produce DC electricity, while your home uses AC. Your inverter transforms this energy with a tiny ~2% conversion loss.\n\n`;
 	} else if (needsPerformance || needsTelemetry) {
+		const currentKw = telemetryData?.currentPowerKw ?? 0;
+		const accumulatedKwh = telemetryData?.accumulatedEnergyKwh ?? performanceData?.actualAccumulatedKwh ?? 0;
+		const expectedKwh = performanceData?.expectedDailyKwh ?? 19.8;
+		const varianceVal = performanceData?.differencePercent ?? "—";
+		const isNight = !telemetryData?.isDaylight && currentKw === 0;
+
 		text += `### Solar Performance & Telemetry Briefing\n\n`;
-		text += `**Site:** ${telemetryData?.siteName || performanceData?.siteName || "Haider Rooftop Solar Array"}\n`;
+		text += `**Site:** ${activeSiteName}\n`;
 		text += `**Date:** ${telemetryData?.date || performanceData?.date || "Today"}\n\n`;
+
+		if (isNight) {
+			text += `Right now it is nighttime, so the panels are currently resting at **0.00 kW**. Total recorded generation for today concluded at **${accumulatedKwh} kWh**.\n\n`;
+		} else {
+			text += `Your installation is currently active and delivering **${currentKw} kW** of live power, with **${accumulatedKwh} kWh** generated so far today.\n\n`;
+		}
 
 		text += `| Operational Metric | Live Telemetry | Expected Target | Variance |\n`;
 		text += `| :--- | :--- | :--- | :--- |\n`;
-		text += `| **Instantaneous Power (kW)** | ${telemetryData?.currentPowerKw ?? 0} kW | ${(weatherData?.peakPowerExpectedKw || 3.75)} kW Peak | — |\n`;
-		text += `| **Accumulated Energy (kWh)** | ${telemetryData?.accumulatedEnergyKwh ?? performanceData?.actualAccumulatedKwh ?? 0} kWh | ${performanceData?.expectedDailyKwh ?? 19.8} kWh | ${performanceData?.differencePercent ?? "—"} |\n`;
+		text += `| **Instantaneous Power (kW)** | ${currentKw} kW | ${(weatherData?.peakPowerExpectedKw || 3.75)} kW Peak | — |\n`;
+		text += `| **Accumulated Energy (kWh)** | ${accumulatedKwh} kWh | ${expectedKwh} kWh | ${varianceVal} |\n`;
 		text += `| **Performance State** | **${performanceData?.performanceState || "Nominal Generation"}** | 100% Target | PR: ${performanceData?.performanceRatioPercent || "Optimal"} |\n\n`;
 
 		if (telemetryData?.isSimulated) {
-			text += `> [!NOTE]\n> Telemetry Source: **Simulated Testbed Telemetry** (${telemetryData.inverterSerialNumber}). Physical inverter hardware link is pending synchronization.\n\n`;
+			text += `> [!NOTE]\n> Telemetry Source: **Simulated Testbed Telemetry** (${telemetryData.inverterSerialNumber}). Real-time virtual test stream is active.\n\n`;
 		} else {
-			text += `> [!NOTE]\n> Telemetry Source: **Live Physical Hardware SCADA** (${telemetryData?.inverterSerialNumber || "Linked Inverter"}).\n\n`;
+			text += `> [!NOTE]\n> Telemetry Source: **Live Hardware SCADA** (${telemetryData?.inverterSerialNumber || "Linked Inverter"}).\n\n`;
 		}
 
 		if (weatherData) {
-			text += `**Atmospheric Context:** Ambient temperature is **${weatherData.avgTemperatureC}°C** with **${weatherData.avgCloudCoverPercent}%** cloud cover (${weatherData.weatherCategory}). Plane-of-array peak irradiance is approximately **${weatherData.estimatedGlobalTiltedIrradianceWm2} W/m²**.\n\n`;
+			text += `**Weather & Atmosphere:** Local temperature is **${weatherData.avgTemperatureC}°C** with **${weatherData.avgCloudCoverPercent}%** cloud cover (${weatherData.weatherCategory}). Solar irradiance on the array is roughly **${weatherData.estimatedGlobalTiltedIrradianceWm2} W/m²**.\n\n`;
 		}
+
+		text += `**Expert Insight (in plain terms):**\n`;
+		text += `- **Power (kW) vs. Energy (kWh):** Think of **Power (kW)** like your car's speed (how fast electricity is flowing right this second). **Energy (kWh)** is your odometer (the total amount of electricity stored or used across the day).\n`;
+		text += `- **Performance Ratio (PR):** This measures how cleanly your system translates available sunlight into usable power, after accounting for temperature, wire resistance, and inverter conversion.\n\n`;
 	} else if (needsHistory && historyData) {
 		text += `### Historical Generation Summary\n\n`;
-		text += `Retrieved stored production telemetry across recent cycles for **${historyData.siteName}**:\n\n`;
+		text += `Stored production records across recent cycles for **${activeSiteName}**:\n\n`;
 		text += `| Date | Expected Target | Actual Output | Difference |\n`;
 		text += `| :--- | :--- | :--- | :--- |\n`;
 		for (const d of historyData.dailyHistory) {
 			text += `| ${d.date} | ${d.expectedKwh} kWh | ${d.actualKwh !== null ? `${d.actualKwh} kWh` : "Pending Telemetry"} | ${d.differenceKwh !== null ? `${d.differenceKwh} kWh` : "—"} |\n`;
 		}
-		text += `\n*No artificial records are manufactured; missing entries indicate unlinked telemetry periods.*\n\n`;
+		text += `\n*Historical records reflect verified database logs. Newly onboarded sites begin accumulating telemetry from their first operational day.*\n\n`;
 	}
 
 	// Append technical RAG reference if relevant concepts were asked

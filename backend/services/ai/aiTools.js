@@ -28,10 +28,11 @@ async function resolveAuthorizedSiteId(requestedSiteId, userContext) {
 		return userContext.siteId.toString();
 	}
 
-	// Admin role: can specify any valid siteId, or default to the primary monitored installation
-	if (requestedSiteId && mongoose.Types.ObjectId.isValid(requestedSiteId)) {
-		const exists = await UserData.findById(requestedSiteId);
-		if (exists) return requestedSiteId.toString();
+	// Admin role: can specify any valid siteId, or default to the userContext site or primary monitored installation
+	const candidateId = requestedSiteId || userContext.siteId;
+	if (candidateId && mongoose.Types.ObjectId.isValid(candidateId)) {
+		const exists = await UserData.findById(candidateId);
+		if (exists) return candidateId.toString();
 	}
 
 	// Default to primary installation
