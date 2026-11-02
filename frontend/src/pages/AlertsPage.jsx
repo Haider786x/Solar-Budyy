@@ -6,6 +6,7 @@ import Button from "../components/ui/Button";
 import Modal from "../components/ui/Modal";
 import { useAuth } from "../context/AuthContext";
 import { fetchSOICDashboard, resolveSOICAlert } from "../services/soicApi";
+import { fetchDailyPredictionsByUserId } from "../services/api";
 import {
 	AlertTriangle,
 	CheckCircle2,
@@ -41,30 +42,45 @@ const AlertsPage = () => {
 	const [resolving, setResolving] = useState(false);
 	const [resolveSuccessMsg, setResolveSuccessMsg] = useState("");
 
-	const cap = Number(selectedSite?.systemCapacity) || 5.0;
+	const [historyRecords, setHistoryRecords] = useState([]);
+	const [historyLoading, setHistoryLoading] = useState(false);
 
-	// Dynamic 10-day history computed from current date and active site capacity
-	const tenDayHistory = useMemo(() => {
-		const days = [];
-		const isOutage = selectedSite?.status === "System Outage";
-		const now = new Date();
-		for (let i = 9; i >= 0; i--) {
-			const d = new Date(now);
-			d.setDate(d.getDate() - i);
-			const monthStr = String(d.getMonth() + 1).padStart(2, "0");
-			const dayStr = String(d.getDate()).padStart(2, "0");
-			const expectedVal = +(cap * (4.5 + Math.sin(i * 0.7) * 0.3)).toFixed(1);
-			const actualVal = (i === 0 && isOutage && !resolved)
-				? 0.0
-				: +(expectedVal * (0.92 + Math.cos(i * 0.5) * 0.06)).toFixed(1);
-			days.push({
-				date: `${monthStr}-${dayStr}`,
-				expected: expectedVal,
-				actual: actualVal
-			});
+	// Load ground-truth historical telemetry records from the database
+	useEffect(() => {
+		let isMounted = true;
+		if (!selectedSiteId) {
+			setHistoryRecords([]);
+			return;
 		}
-		return days;
-	}, [cap, selectedSite?.status, resolved]);
+		setHistoryLoading(true);
+		fetchDailyPredictionsByUserId(selectedSiteId)
+			.then((res) => {
+				if (!isMounted) return;
+				if (res?.success && Array.isArray(res.data) && res.data.length > 0) {
+					// res.data is sorted descending (latest first); reverse chronologically for display
+					const chronological = [...res.data].reverse().map((item) => ({
+						date: item.date ? item.date.slice(5) : "N/A",
+						expected: Number(item.predicted_kwh) || 0,
+						actual: item.inverter_real_time_kwh !== "N/A" && item.inverter_real_time_kwh != null
+							? Number(item.inverter_real_time_kwh)
+							: null,
+						isSimulated: Boolean(item.isSimulated)
+					}));
+					setHistoryRecords(chronological);
+				} else {
+					setHistoryRecords([]);
+				}
+			})
+			.catch(() => {
+				if (isMounted) setHistoryRecords([]);
+			})
+			.finally(() => {
+				if (isMounted) setHistoryLoading(false);
+			});
+		return () => {
+			isMounted = false;
+		};
+	}, [selectedSiteId]);
 
 	// Load live alerts from backend filtered by active site
 	const loadAlerts = useCallback(async () => {
@@ -449,13 +465,15 @@ const AlertsPage = () => {
 					</div>
 				)}
 
-				{/* 10-Day Performance History Grouped Bar Chart */}
+				{/* Performance History (Ground truth from DailyPrediction records) */}
 				<Card className="p-5">
 					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2">
 						<div>
-							<h2 className="text-xs font-bold text-slate-900">10-Day Performance History</h2>
+							<h2 className="text-xs font-bold text-slate-900">
+								Daily Generation History {historyRecords.length > 0 ? `(${historyRecords.length} Day${historyRecords.length > 1 ? "s" : ""} Recorded)` : ""}
+							</h2>
 							<p className="text-[11px] text-slate-400 mt-0.5">
-								Daily expected generation (Blue) versus actual recorded generation (Green).
+								Recorded daily expected generation (Blue) versus inverter telemetry (Green) from database records.
 							</p>
 						</div>
 						<div className="flex items-center gap-4 text-xs font-semibold">
@@ -465,30 +483,47 @@ const AlertsPage = () => {
 							</span>
 							<span className="flex items-center gap-1.5 text-slate-700 text-[11px]">
 								<span className="w-3 h-3 bg-emerald-500 rounded-xs"></span>
-								Actual Production (kWh)
+								Actual Telemetry (kWh)
 							</span>
 						</div>
 					</div>
 
-					<div className="h-56 w-full pt-3">
-						<ResponsiveContainer width="100%" height="100%">
-							<BarChart data={tenDayHistory} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-								<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-								<XAxis dataKey="date" tick={{ fontSize: 10, fill: "#64748B" }} tickLine={false} />
-								<YAxis
-									tick={{ fontSize: 10, fill: "#64748B" }}
-									tickLine={false}
-									unit=" kWh"
-									domain={[0, +(cap * 5.5).toFixed(0)]}
-								/>
-								<Tooltip
-									contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.06)", color: "#1E293B", fontSize: "12px", fontFamily: "Inter, sans-serif" }}
-								/>
-								<Bar dataKey="expected" fill="#2563EB" radius={[2, 2, 0, 0]} maxBarSize={20} />
-								<Bar dataKey="actual" fill="#10B981" radius={[2, 2, 0, 0]} maxBarSize={20} />
-							</BarChart>
-						</ResponsiveContainer>
-					</div>
+					{historyLoading ? (
+						<div className="h-56 flex items-center justify-center text-xs text-slate-400">
+							Loading telemetry history...
+						</div>
+					) : historyRecords.length > 0 ? (
+						<div className="h-56 w-full pt-3">
+							<ResponsiveContainer width="100%" height="100%">
+								<BarChart data={historyRecords} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+									<CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+									<XAxis dataKey="date" tick={{ fontSize: 10, fill: "#64748B" }} tickLine={false} />
+									<YAxis
+										tick={{ fontSize: 10, fill: "#64748B" }}
+										tickLine={false}
+										unit=" kWh"
+									/>
+									<Tooltip
+										formatter={(value, name) => [
+											value !== null ? `${value} kWh` : "Pending Telemetry",
+											name === "expected" ? "Expected Target" : "Actual Telemetry"
+										]}
+										contentStyle={{ backgroundColor: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.06)", color: "#1E293B", fontSize: "12px", fontFamily: "Inter, sans-serif" }}
+									/>
+									<Bar dataKey="expected" fill="#2563EB" radius={[2, 2, 0, 0]} maxBarSize={28} />
+									<Bar dataKey="actual" fill="#10B981" radius={[2, 2, 0, 0]} maxBarSize={28} />
+								</BarChart>
+							</ResponsiveContainer>
+						</div>
+					) : (
+						<div className="h-44 flex flex-col items-center justify-center text-center p-6 border border-dashed border-slate-200 rounded-lg mt-3 bg-slate-50/50">
+							<Activity className="w-8 h-8 text-slate-300 mb-2" />
+							<p className="text-xs font-medium text-slate-600">No Historical Telemetry Logged Yet</p>
+							<p className="text-[11px] text-slate-400 max-w-sm mt-1">
+								Daily generation history will appear here once daily prediction and inverter telemetry data points are recorded in the database.
+							</p>
+						</div>
+					)}
 				</Card>
 
 				{/* Modal for Resolve Alert */}
