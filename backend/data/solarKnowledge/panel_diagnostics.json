@@ -1,0 +1,34 @@
+[
+  {
+    "id": "soiling_and_dust_loss",
+    "topic": "Panel Diagnostics",
+    "title": "Soiling, Dust Deposition, and Cleaning Requirements",
+    "keywords": ["soiling", "dust", "cleaning", "dirt", "washing", "soiling loss", "diff", "underperformance", "rain"],
+    "summary": "Dust and particulate accumulation on panel glass attenuates solar irradiance, gradually degrading daily yield by 3% to 25% if unwashed.",
+    "content": "Soiling refers to the accumulation of dust, dirt, pollen, bird droppings, and industrial particulates on the front glass of solar panels. In urban and semi-arid regions (such as northern and western India), dry seasonal deposition causes cumulative daily generation losses ranging from 5% up to 25%. SolarBuddy flags an installation with a 'Needs Cleaning' advisory when actual production falls 15% to 25% below meteorological expectations across consecutive clear-sky days while other system parameters remain balanced. Periodic washing with demineralized water restores full optical transmission."
+  },
+  {
+    "id": "partial_shading_and_bypass_diodes",
+    "topic": "Panel Diagnostics",
+    "title": "Partial Shading and Bypass Diode Operation",
+    "keywords": ["shading", "partial shading", "bypass diode", "chimney", "tree", "hotspot", "sub-string", "voltage notch"],
+    "summary": "Bypass diodes conduct around shaded cell groups to prevent current bottlenecks and destructive hotspot heating.",
+    "content": "Photovoltaic cells within a module are connected in series. When even a single cell is shaded (by a vent pipe, antenna, foliage, or structure), it acts as a high-resistance load, restricting the current of the entire string and dissipating power as localized heat (hotspot). To prevent destructive cell breakdown, modern panels incorporate three anti-parallel bypass diodes across sub-strings of 20 to 24 cells. When shading occurs, the bypass diode forward-biases, allowing string current to circumvent the shaded section. This results in a discrete voltage drop proportional to the bypassed sub-string."
+  },
+  {
+    "id": "panel_degradation_rates",
+    "topic": "Panel Diagnostics",
+    "title": "Long-Term Panel Degradation Rates",
+    "keywords": ["degradation", "aging", "warranted yield", "lid", "pid", "annual degradation", "microcracks", "delamination"],
+    "summary": "Tier-1 monocrystalline panels exhibit light-induced initial derating followed by a steady annual degradation of 0.4% to 0.7% per year.",
+    "content": "Solar panels undergo natural aging through exposure to UV radiation, moisture, and thermal cycling. Typical degradation curves include: 1) Initial Light-Induced Degradation (LID) of 1.0% to 2.5% during the first 1000 hours of solar exposure; 2) Steady linear degradation of 0.4% to 0.6% annually for premium monocrystalline modules. High-voltage stress can induce Potential-Induced Degradation (PID), causing leakage currents through module encapsulation. High quality installations are typically warranted to maintain at least 80% to 85% of rated capacity after 25 years of continuous operation."
+  },
+  {
+    "id": "hotspots_and_cell_cracking",
+    "topic": "Panel Diagnostics",
+    "title": "Hotspots, Solder Joint Fatigue, and Micro-cracks",
+    "keywords": ["hotspot", "microcracks", "thermal imaging", "cell failure", "burn mark", "electroluminescence", "ir camera"],
+    "summary": "Localized resistance anomalies cause severe temperature spikes (hotspots) visible via infrared thermography.",
+    "content": "Hotspots occur when a solar cell or solder busbar experiences localized localized electrical resistance or localized persistent shading. The affected area dissipates rather than generates power, reaching temperatures in excess of 100°C–150°C. Left unaddressed, hotspots can melt solder joints, brown the EVA encapsulation sheet, and cause glass fracture. Hotspots are diagnosed using thermal infrared cameras (thermography) and electroluminescence (EL) imaging."
+  }
+]

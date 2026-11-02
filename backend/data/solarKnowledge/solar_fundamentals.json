@@ -1,0 +1,34 @@
+[
+  {
+    "id": "photovoltaic_conversion",
+    "topic": "Solar Fundamentals",
+    "title": "Photovoltaic Energy Conversion",
+    "keywords": ["photovoltaic", "pv", "solar cell", "silicon", "photon", "electrons", "dc power", "conversion"],
+    "summary": "Photovoltaic cells convert incident sunlight directly into direct current (DC) electricity using the semiconductor photoelectric effect.",
+    "content": "Photovoltaic (PV) solar cells are made of semiconductor materials (typically crystalline silicon). When photons with energy greater than the bandgap strike the semiconductor, electrons are excited into the conduction band, creating electron-hole pairs. Built-in electric fields created by p-n junctions separate these carriers, driving a direct electrical current (DC). The instantaneous power output (measured in kW) is directly proportional to solar irradiance, while total energy output (measured in kWh) represents the accumulation of this power over time. Factors impacting cell conversion include spectrum, bandgap, reflection losses, and recombination."
+  },
+  {
+    "id": "solar_irradiance_and_gti",
+    "topic": "Solar Fundamentals",
+    "title": "Solar Irradiance and Global Tilted Irradiance (GTI)",
+    "keywords": ["irradiance", "gti", "global tilted irradiance", "ghi", "dni", "dhi", "w/m2", "insolation", "sunlight"],
+    "summary": "Global Tilted Irradiance (GTI) measures total solar radiation striking the tilted panel surface, combining direct, diffuse, and reflected light.",
+    "content": "Solar irradiance is the instantaneous solar power per unit area (W/m²), whereas solar insolation is the accumulated radiant energy over time (kWh/m²/day). For tilted rooftop arrays, Global Tilted Irradiance (GTI) is the definitive meteorological metric. GTI consists of three components: Direct Normal Irradiance (DNI) projected onto the array plane, Diffuse Horizontal Irradiance (DHI) scattered by the atmosphere and clouds, and ground-reflected albedo. Under Standard Test Conditions (STC), panels are rated at 1000 W/m² GTI at 25°C cell temperature. Clear sky peak irradiance typically reaches 800–1050 W/m²."
+  },
+  {
+    "id": "temperature_effects_on_panels",
+    "topic": "Solar Fundamentals",
+    "title": "Temperature Coefficient and Thermal Derating",
+    "keywords": ["temperature", "cell temp", "temperature coefficient", "thermal derating", "heat loss", "voltage drop", "pmax"],
+    "summary": "Solar panels operate less efficiently as their cell temperature rises above 25°C, typically losing 0.35% to 0.45% output per degree Celsius.",
+    "content": "While intense sunlight increases output, excessive ambient heat degrades photovoltaic efficiency. Monocrystalline silicon solar panels exhibit a negative temperature coefficient of maximum power (Pmax), typically between -0.35%/°C and -0.45%/°C. Solar cells operate 20°C to 30°C hotter than ambient air under bright sunshine. Operating cell temperature is estimated using Nominal Operating Cell Temperature (NOCT): Tcell = Tambient + (NOCT - 20) * (GTI / 800). On a 35°C afternoon with cell temperatures reaching 60°C (35°C above STC 25°C), an array suffers approximately 12–15% thermal power derating."
+  },
+  {
+    "id": "solar_production_curves",
+    "topic": "Solar Fundamentals",
+    "title": "Daily Solar Production Curve and Bell Shape",
+    "keywords": ["curve", "bell curve", "diurnal", "solar noon", "azimuth", "zenith", "sunrise", "sunset", "hourly"],
+    "summary": "A clean solar array displays a diurnal Gaussian bell curve peaking at local solar noon when the sun is perpendicular to the panels.",
+    "content": "In unobstructed conditions, solar generation follows a characteristic bell curve (Gaussian diurnal curve). Generation starts at sunrise (approx. 06:00 to 06:30), climbs steadily as the solar elevation angle rises, peaks at solar noon (typically between 12:00 and 12:45 depending on longitude and local meridian), and declines symmetrically until sunset. Deviations from this bell curve indicate external factors: morning suppression indicates eastern obstacles or fog, midday sharp drops indicate cloud passages or clipping, and persistent afternoon reductions indicate western shading or thermal degradation."
+  }
+]

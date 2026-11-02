@@ -1,0 +1,26 @@
+[
+  {
+    "id": "solarbuddy_physics_pipeline",
+    "topic": "SolarBuddy Architecture",
+    "title": "SolarBuddy Physics Engine (pvlib, SAPM, & Open-Meteo)",
+    "keywords": ["solarbuddy", "pvlib", "sapm", "sandia", "pvwatts", "physics engine", "open-meteo", "python fastapi", "pipeline"],
+    "summary": "SolarBuddy leverages Python FastAPI, pvlib, and Open-Meteo reanalysis to model plane-of-array irradiance and cell thermal dynamics.",
+    "content": "SolarBuddy's prediction pipeline relies on a Python FastAPI microservice utilizing pvlib (Photovoltaic Laboratory open-source library). The pipeline incorporates: 1) Open-Meteo Hourly Satellite Reanalysis API supplying hourly GTI, Direct Normal Irradiance (DNI), Diffuse Horizontal Irradiance (DHI), 2m ambient temperature, wind speed, and cloud cover; 2) Solar position calculations computing accurate solar zenith and azimuth based on site latitude, longitude, and timestamps; 3) The Sandia Array Performance Model (SAPM) and PVWatts cell temperature equations: Tcell = Tamb + GTI * exp(-a - b * wind_speed); 4) AC power modeling applying inverter efficiency curves and clipping bounds. This yields hourly power predictions and aggregated daily expected kWh."
+  },
+  {
+    "id": "soic_alert_engine_rules",
+    "topic": "SolarBuddy Architecture",
+    "title": "Solar Operations Intelligence Center (SOIC) Alert Engine",
+    "keywords": ["soic", "alert engine", "incident", "severity", "yellow", "orange", "red", "critical", "offline", "escalation"],
+    "summary": "The SOIC alert engine evaluates daily performance across a rolling window and triggers multi-tier operational incident escalations.",
+    "content": "SolarBuddy's SOIC (Solar Operations Intelligence Center) continuously monitors installations against five severity tiers: 1) YELLOW (Performance Alert): Actual generation is below 90% of expected target for 2 consecutive days, or below 75% for 1 day; 2) ORANGE (Degraded Alert): Continued underperformance across 3 to 4 days, indicating persistent soiling, string fault, or severe shading; 3) RED (Urgent Dispatch): Performance below 50% for multiple days or persistent degradation; 4) CRITICAL (System Outage): Complete loss of daytime generation (<5% expected output) during peak daylight hours, indicating inverter MPPT lockout, blown string fuse, or DC disconnect trip; 5) OFFLINE: Inverter telemetry stopped reporting or connection timed out. Alerts are tracked with unique incident IDs (e.g. #INC-XXXXXX) until resolved by field maintenance."
+  },
+  {
+    "id": "telemetry_separation_and_demo_mode",
+    "topic": "SolarBuddy Architecture",
+    "title": "Data Integrity: Actual Telemetry vs. Predictions vs. Simulated Mode",
+    "keywords": ["data integrity", "simulated", "actual telemetry", "demo mode", "inverter serial", "scada", "transmitting"],
+    "summary": "SolarBuddy strictly isolates physical inverter telemetry from mathematical predictions and synthetic/demo testing modes.",
+    "content": "Data integrity is fundamental to SolarBuddy's operations. The platform maintains strict isolation between: 1) Hardware Telemetry: Inverter telemetry polled via RS485/Modbus, SolarEdge API, or Fox Cloud using real inverter serial numbers; 2) Meteorological Predictions: Mathematical physics outputs produced by pvlib before energy is generated; 3) Demo/Simulated Telemetry: Synthetic data generated when an installation has not yet bound real physical inverter hardware (e.g., PENDING_INVERTER_ID). The platform and AI must always explicitly identify the data source, ensuring synthetic test data is never misrepresented as certified physical measurements."
+  }
+]
