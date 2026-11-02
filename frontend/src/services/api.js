@@ -188,3 +188,74 @@ export const fetchDemoTelemetry = async (siteId, date = null) => {
 	});
 	return parseResponse(response, "Failed to fetch real-time telemetry");
 };
+
+// SolarBuddy AI Operations Assistant Endpoints
+export const sendAIChatMessage = async ({ messages, siteId }) => {
+	const response = await fetch(`${API_BASE_URL}/api/ai/chat`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			...getAuthHeaders()
+		},
+		body: JSON.stringify({ messages, siteId })
+	});
+	return parseResponse(response, "Failed to communicate with SolarBuddy AI");
+};
+
+export const streamAIChatMessage = async ({ messages, siteId, onDelta, onToolCall, onDone, onError }) => {
+	try {
+		const response = await fetch(`${API_BASE_URL}/api/ai/chat`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				...getAuthHeaders()
+			},
+			body: JSON.stringify({ messages, siteId, stream: true })
+		});
+
+		if (!response.ok) {
+			let errMsg = `AI service returned error (${response.status})`;
+			try {
+				const errJson = await response.json();
+				if (errJson?.message) errMsg = errJson.message;
+			} catch {}
+			throw new Error(errMsg);
+		}
+
+		const reader = response.body.getReader();
+		const decoder = new TextDecoder("utf-8");
+		let buffer = "";
+
+		while (true) {
+			const { done, value } = await reader.read();
+			if (done) break;
+
+			buffer += decoder.decode(value, { stream: true });
+			const lines = buffer.split("\n\n");
+			buffer = lines.pop() || "";
+
+			for (const line of lines) {
+				const trimmed = line.trim();
+				if (trimmed.startsWith("data: ")) {
+					try {
+						const eventData = JSON.parse(trimmed.slice(6));
+						if (eventData.type === "tool_call") {
+							onToolCall?.(eventData.tool);
+						} else if (eventData.type === "delta") {
+							onDelta?.(eventData.content);
+						} else if (eventData.type === "done") {
+							onDone?.(eventData.metadata);
+						} else if (eventData.type === "error") {
+							onError?.(new Error(eventData.message));
+						}
+					} catch (e) {
+						// continue
+					}
+				}
+			}
+		}
+	} catch (err) {
+		onError?.(err);
+	}
+};
+

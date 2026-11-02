@@ -25,20 +25,20 @@ const RegisterPage = () => {
 
 	// Step 1: Account Info
 	const [accountType, setAccountType] = useState("customer"); // 'customer' | 'admin'
-	const [fullName, setFullName] = useState(accountType === "admin" ? "Fleet Operations Admin" : "Mohammad Haider");
+	const [fullName, setFullName] = useState(accountType === "admin" ? "Haider-admin" : "Haider (Home)");
 	const [email, setEmail] = useState(accountType === "admin" ? "admin@solarbuddy.internal" : "lordxgrimx786@gmail.com");
-	const [phone, setPhone] = useState("+91 9988776655");
+	const [phone, setPhone] = useState("+91 8933827478");
 	const [password, setPassword] = useState("SolarBuddy2026!");
 	const [confirmPassword, setConfirmPassword] = useState("SolarBuddy2026!");
 
 	// Step 2: System Geometry & Location
-	const [installationName, setInstallationName] = useState("Lucknow Residential Array");
+	const [installationName, setInstallationName] = useState("Haider (Home)");
 	const [areaName, setAreaName] = useState("Lucknow, Uttar Pradesh");
-	const [latitude, setLatitude] = useState("26.8467");
-	const [longitude, setLongitude] = useState("80.9462");
+	const [latitude, setLatitude] = useState("26.853177");
+	const [longitude, setLongitude] = useState("80.892815");
 	const [selectedPreset, setSelectedPreset] = useState("Lucknow");
-	const [numberOfPanels, setNumberOfPanels] = useState(14);
-	const [moduleWatts, setModuleWatts] = useState(360);
+	const [numberOfPanels, setNumberOfPanels] = useState(6);
+	const [moduleWatts, setModuleWatts] = useState(667);
 	const [roofTilt, setRoofTilt] = useState("26");
 	const [panelDirection, setPanelDirection] = useState("180");
 
@@ -93,45 +93,39 @@ const RegisterPage = () => {
 		try {
 			if (!isAuthenticated) {
 				const role = accountType === "admin" ? "admin" : "user";
-				try {
-					await register({
-						name: fullName,
-						email,
-						password,
-						role
-					});
-				} catch {}
+				await register({
+					name: fullName,
+					email,
+					password,
+					confirmPassword: password,
+					role
+				});
 			}
 
 			// Register physical installation with precise coordinates and location
-			let createdSite = null;
-			try {
-				createdSite = await createUser({
-					name: installationName,
-					email: email || user?.email || "lordxgrimx786@gmail.com",
-					phoneNumber: phone || "8933827478",
-					location: {
-						latitude: parseFloat(latitude),
-						longitude: parseFloat(longitude)
-					},
+			const createdSite = await createUser({
+				name: installationName,
+				email: email || user?.email || "lordxgrimx786@gmail.com",
+				phoneNumber: phone || "+91 8933827478",
+				location: {
 					latitude: parseFloat(latitude),
-					longitude: parseFloat(longitude),
-					systemCapacity: parseFloat(ratedKwp),
-					numberOfPanels: parseInt(numberOfPanels, 10),
-					tiltDeg: parseFloat(roofTilt),
-					azimuthDeg: parseFloat(panelDirection),
-					shadingFactor: 0.95,
-					soilingLossPercent: 2.0,
-					inverterLossPercent: 2.0,
-					wiringLossPercent: 2.0,
-					miscLossPercent: 1.5,
-					dc_ac_ratio: 1.2,
-					inv_efficiency: 98.0,
-					bifaciality: 0
-				});
-			} catch (creationErr) {
-				console.log("[RegisterPage] Site creation notice:", creationErr.message);
-			}
+					longitude: parseFloat(longitude)
+				},
+				latitude: parseFloat(latitude),
+				longitude: parseFloat(longitude),
+				systemCapacity: parseFloat(ratedKwp),
+				numberOfPanels: parseInt(numberOfPanels, 10),
+				tiltDeg: parseFloat(roofTilt),
+				azimuthDeg: parseFloat(panelDirection),
+				shadingFactor: 0.95,
+				soilingLossPercent: 2.0,
+				inverterLossPercent: 2.0,
+				wiringLossPercent: 2.0,
+				miscLossPercent: 1.5,
+				dc_ac_ratio: 1.2,
+				inv_efficiency: 98.0,
+				bifaciality: 0
+			});
 
 			if (refreshFleetSites) {
 				await refreshFleetSites();
@@ -139,10 +133,9 @@ const RegisterPage = () => {
 			if (createdSite?._id) {
 				selectSite(createdSite._id);
 			}
-			navigate("/installations");
+			navigate("/");
 		} catch (err) {
-			setError(err.message || "Registration completed. Proceeding to fleet.");
-			navigate("/installations");
+			setError(err.message || "Registration failed. Please check form details.");
 		} finally {
 			setLoading(false);
 		}

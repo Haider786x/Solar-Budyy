@@ -38,6 +38,17 @@ const createUserData = async (req, res) => {
 			};
 		}
 
+		// Ensure schema defaults so minimal onboarding payloads never fail validation
+		if (!req.body.phoneNumber) req.body.phoneNumber = "+91 8933827478";
+		if (req.body.tiltDeg == null) req.body.tiltDeg = 26;
+		if (req.body.azimuthDeg == null) req.body.azimuthDeg = 180;
+		if (req.body.soilingLossPercent == null) req.body.soilingLossPercent = 2.0;
+		if (req.body.inverterLossPercent == null) req.body.inverterLossPercent = 2.0;
+		if (req.body.wiringLossPercent == null) req.body.wiringLossPercent = 2.0;
+		if (req.body.miscLossPercent == null) req.body.miscLossPercent = 1.5;
+		if (req.body.dc_ac_ratio == null) req.body.dc_ac_ratio = 1.2;
+		if (req.body.inv_efficiency == null) req.body.inv_efficiency = 98.0;
+
 		const createdRecord = await UserData.create(req.body);
 
 		// If created by a normal user, associate the site to their Account
@@ -71,6 +82,12 @@ const createUserData = async (req, res) => {
 
 const listUserData = async (req, res) => {
 	try {
+		if (req.user && req.user.role !== "admin") {
+			return res.status(403).json({
+				success: false,
+				message: "Forbidden: Fleet directory access restricted to administrators."
+			});
+		}
 		const users = await UserData.find().sort({ createdAt: -1, _id: -1 });
 		return res.status(200).json({
 			message: "Users fetched successfully",

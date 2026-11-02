@@ -10,6 +10,7 @@ const dailyPredictionRoute = require("./routes/dailyPrediction.route");
 const soicAlertsRoute = require("./routes/soicAlerts.route");
 const positiveProductionEmailRoute = require("./routes/positiveProductionEmail.route");
 const demoRoute = require("./routes/demo.route");
+const aiRoute = require("./routes/ai.route");
 const { initializeDailyPredictionScheduler } = require("./services/dailyPredictionScheduler");
 const { syncAllHistoricalMonthlyProduction } = require("./services/monthlyProductionService");
 
@@ -35,6 +36,7 @@ app.use("/users", dailyPredictionRoute);
 app.use("/soic", soicAlertsRoute);
 app.use("/notifications", positiveProductionEmailRoute);
 app.use("/api/demo", demoRoute);
+app.use("/api/ai", aiRoute);
 
 app.get("/", (req, res) => {
 	res.send("Backend running");

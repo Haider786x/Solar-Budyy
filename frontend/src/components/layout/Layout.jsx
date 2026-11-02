@@ -1,8 +1,12 @@
 import TopNav from "./TopNav";
 import Footer from "./Footer";
 import { Outlet } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import SolarBuddyAIChatWidget from "../ai/SolarBuddyAIChatWidget";
 
 const Layout = ({ children, fullBleed = false, darkFooter = false }) => {
+	const { isAuthenticated } = useAuth();
+
 	return (
 		<div className="min-h-screen flex flex-col bg-[#F4F7FB] text-slate-800 antialiased font-sans">
 			<TopNav />
@@ -16,6 +20,7 @@ const Layout = ({ children, fullBleed = false, darkFooter = false }) => {
 				</main>
 			)}
 			<Footer dark={darkFooter} />
+			{isAuthenticated && <SolarBuddyAIChatWidget />}
 		</div>
 	);
 };

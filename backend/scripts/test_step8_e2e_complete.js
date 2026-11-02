@@ -1,4 +1,4 @@
-﻿const path = require('path');
+const path = require('path');
 const dotenv = require('dotenv');
 dotenv.config({ path: path.join(__dirname, '../.env') });
 
@@ -165,8 +165,8 @@ const runTests = async () => {
 
 		// SECTION 3: CROSS-TENANT DEFENSE & PARAMETER TAMPERING
 		console.log('\n--- SECTION 3: CROSS-TENANT DEFENSE & PARAMETER TAMPERING ---');
-		// Seeded user site (Mohammad Haider site)
-		const seededSite = await UserData.findOne({ name: /Mohammad Haider/i });
+		// Seeded user site (Haider site)
+		const seededSite = await UserData.findOne({ name: /Haider/i });
 		const foreignSiteId = seededSite._id.toString();
 		const foreignSiteName = seededSite.name;
 

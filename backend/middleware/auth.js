@@ -93,11 +93,6 @@ const requireSiteAccess = async (req, res, next) => {
 			return next();
 		}
 
-		// Read-only inspection (GET) across monitored fleet installations
-		if (req.method === "GET") {
-			return next();
-		}
-
 		// Normal user must have a linked site for modifications
 		if (!req.user.siteId) {
 			return res.status(403).json({

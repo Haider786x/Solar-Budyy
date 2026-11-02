@@ -240,10 +240,10 @@ const TopNav = () => {
 								</div>
 								<div className="hidden xl:flex flex-col text-left leading-none">
 									<span className="text-xs font-semibold text-slate-100 max-w-[125px] truncate">
-										{isAdmin ? "Admin (Haider)" : (user?.name || "Haider")}
+										{isAdmin ? (user?.name || "Haider-admin") : (user?.name || "Haider (Home)")}
 									</span>
 									<span className="text-[10px] text-slate-400 mt-0.5">
-										{isAdmin ? "Fleet Operations" : "Site Owner"}
+										{isAdmin ? "Fleet Operations Admin" : "Site Owner"}
 									</span>
 								</div>
 							</div>
