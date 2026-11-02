@@ -2,8 +2,8 @@
 
 > **Role:** Single source of truth for engineering state, checkpointing, and agent continuation.  
 > **Repository:** `D:\webdev\project\minor project\Solar Budyy`  
-> **Current Phase:** Phase 2 (Branding Consistency) — **COMPLETED** | Next: Phase 3 (Design System)  
-> **Branch:** `main` | **HEAD:** `fe0116a` (*Phase 1: verify Solis multi-role authorization, response styles, and tool suite*)  
+> **Current Phase:** Phase 3 (Design System) — **COMPLETED** | Next: Phase 4 (Overview Page)  
+> **Branch:** `main` | **HEAD:** `f1f9d38` (*Phase 2: standardize SolarBuddy branding, --sb-* design tokens, and empty registration defaults*)  
 > **Rollback Points:**  
 > - Branch: `rollback-phase0-baseline` (`d8ddae7`)  
 > - Tag: `phase0-solis-initial` (`f2631a0`)  
@@ -117,20 +117,17 @@ All commands executed and outputs verified:
 | 2026-11-02 18:52 | Solis Implementation | `systemPrompt.js`, `modelProvider.js`, `SolarBuddyAIChatWidget.jsx`, `solis-logo.png` | Rebranded AI to Solis, updated prompt, welcome screen, context panel, source details | Committed in `f2631a0` |
 | 2026-11-02 19:23 | Phase 0 Baseline Complete | `SolarBuddy_UI_Refinement_Context.md`, `SOLARBUDDY_HANDOFF.md` | Full recovery audit, baseline tests logged, rollback points established | **Phase 0 ACCEPTED** |
 | 2026-11-02 19:27 | Phase 1 Solis Verified | `test_solis_suite.js`, `SOLARBUDDY_HANDOFF.md`, `SolarBuddy_UI_Refinement_Context.md` | 12/12 Solis authorization, response styles, and tool tests passed | **Phase 1 ACCEPTED** (Commit `fe0116a`) |
-| 2026-11-02 19:48 | Phase 2 Branding Complete | 11 files (see git diff) | Standardized SolarBuddy (0 legacy names), `--sb-*` tokens (0 `--sw-`), empty register defaults, Lucide icons | **Phase 2 ACCEPTED** |
+| 2026-11-02 19:48 | Phase 2 Branding Complete | 11 files (see git diff) | Standardized SolarBuddy (0 legacy names), `--sb-*` tokens (0 `--sw-`), empty register defaults, Lucide icons | **Phase 2 ACCEPTED** (Commit `f1f9d38`) |
+| 2026-11-02 19:56 | Phase 3 Design System Complete | 8 files (7 UI components + `OverviewPage.jsx`) | Built Button, Card, Badge, StatBlock, Modal, Toast, Skeleton; integrated Card/Badge into Overview | **Phase 3 ACCEPTED** |
 
 ---
 
-## 5. Exact Next Step: Phase 3 — Design System
+## 5. Exact Next Step: Phase 4 — Overview Page (Highest UI Priority)
 
-1. Create modular UI components in `frontend/src/components/ui/`:
-   - `Button.jsx`
-   - `Card.jsx`
-   - `Badge.jsx`
-   - `StatBlock.jsx`
-   - `Modal.jsx`
-   - `Toast.jsx`
-   - `Skeleton.jsx`
-2. Integrate design tokens (`--sb-*`) with consistent spacing and typography.
-3. Replace `window.alert`, `window.confirm`, `window.prompt` in active flows with proper accessible modals/toasts.
-4. Verify build and stage/commit Phase 3.
+1. Establish true visual hierarchy on `OverviewPage.jsx`:
+   - Hero today's generation KPI with tabular large figures.
+   - Demote secondary metrics into clean divider row.
+   - Refine solar production curve (solid actual, dashed expected, subtle area gradient fill, light horizontal gridlines).
+   - Clean up environmental and site panels.
+   - Verify Demo Inverter vs Physical telemetry labeling.
+2. Verify production build passes and commit Phase 4.

@@ -129,11 +129,17 @@ Protected frontend files:
   - [x] Verified frontend build passes in 1.09s
   - [x] Commit Phase 2
 
-- [ ] **Phase 3: Design System Components**
-  - [ ] Create `Button.jsx`, `Card.jsx`, `Badge.jsx`, `StatBlock.jsx` in `frontend/src/components/ui/`
-  - [ ] Create `Modal.jsx` and `Toast.jsx` to replace `window.alert`, `window.confirm`, `window.prompt`
-  - [ ] Create `Skeleton.jsx` loaders
-  - [ ] Commit Phase 3
+- [x] **Phase 3: Design System Components**
+  - [x] Created `Button.jsx` (accessible variants, loading, disabled, focus rings)
+  - [x] Created `Card.jsx` (unified surface, padding, CardHeader, CardContent, CardFooter)
+  - [x] Created `Badge.jsx` (healthy, warning, critical, info, neutral, demo with dots/pulse)
+  - [x] Created `StatBlock.jsx` (tabular numerals, unit, trend indicators)
+  - [x] Created `Modal.jsx` (accessible dialog with focus trap, ESC closing, backdrop blur)
+  - [x] Created `Toast.jsx` (in-app notification provider and hooks replacing raw alerts)
+  - [x] Created `Skeleton.jsx` (shaped animated loading placeholders)
+  - [x] Integrated `Card` and `Badge` into `OverviewPage.jsx` KPI blocks
+  - [x] Verified production build passes with 0 errors (built in 989ms)
+  - [x] Commit Phase 3
 
 - [ ] **Phase 4: Overview Page Refinement**
   - [ ] Establish hero today's generation KPI with tabular numbers

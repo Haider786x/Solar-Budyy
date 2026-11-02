@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { useAuth, formatLocationString } from "../context/AuthContext";
 import { useDemo } from "../context/DemoContext";
 import Layout from "../components/layout/Layout";
+import Card, { CardHeader } from "../components/ui/Card";
+import Badge from "../components/ui/Badge";
+import Button from "../components/ui/Button";
 import SiteLocationMap from "../components/SiteLocationMap";
 import { fetchDailyPredictionsByUserId, fetchUserById } from "../services/api";
 import {
@@ -268,7 +271,7 @@ const OverviewPage = () => {
 						</div>
 						<div className="bg-white border border-slate-200 rounded px-2.5 py-1 text-slate-700 font-medium flex items-center gap-1.5 shadow-2xs">
 							<Calendar className="w-3.5 h-3.5 text-slate-400" />
-							<span>Today - Oct 31, 2026</span>
+							<span>Today • {new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
 						</div>
 						<Link
 							to="/solar-system"
@@ -281,100 +284,110 @@ const OverviewPage = () => {
 				</div>
 
 				{/* 4 KPI Metric Cards */}
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
 					{/* KPI 1: Energy Generated Today */}
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
-						<div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-							<span>Energy Generated Today</span>
-							<span className={`font-bold flex items-center gap-1 text-[11px] ${
-								isOutage
-									? "text-rose-600"
-									: isPendingHardware
-									? "text-amber-600"
-									: "text-emerald-600"
-							}`}>
-								<span className={`w-1.5 h-1.5 rounded-full ${
-									isOutage
-										? "bg-rose-500"
-										: isPendingHardware
-										? "bg-amber-500"
-										: "bg-emerald-500 animate-pulse"
-								}`}></span>
-								{isOutage ? "Offline" : isPendingHardware ? "Pending Inverter Link" : "Active"}
+					<Card padding="default">
+						<div className="flex items-center justify-between mb-1">
+							<span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+								Energy Generated
 							</span>
+							<Badge
+								variant={isOutage ? "critical" : isPendingHardware ? "warning" : "healthy"}
+								dot
+								pulse={!isOutage && !isPendingHardware}
+							>
+								{isOutage ? "Offline" : isPendingHardware ? "Pending Inverter" : isDemoActive ? "Demo Mode" : "Active"}
+							</Badge>
 						</div>
-						<div className="flex items-baseline gap-1 mt-2">
-							<span className="text-3xl font-extrabold text-slate-900 tracking-tight">{energyToday}</span>
-							<span className="text-sm font-semibold text-slate-500">kWh</span>
-							<span className="text-xs text-slate-400 ml-auto">
+						<div className="flex items-baseline gap-1 my-1">
+							<span className="text-3xl font-black text-slate-900 font-tabular">{energyToday}</span>
+							<span className="text-xs font-semibold text-slate-500">kWh</span>
+							<span className="text-xs text-slate-400 ml-auto font-tabular">
 								target: {targetToday} kWh
 							</span>
 						</div>
-						<div className="flex items-center gap-3 mt-3 pt-2.5 border-t border-slate-100 text-[11px]">
-							<span className="flex items-center gap-1 text-emerald-700 font-semibold">
-								<span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+						<div className="flex items-center gap-3 mt-3 pt-2.5 border-t border-slate-100 text-xs">
+							<span className="flex items-center gap-1.5 text-emerald-700 font-semibold font-tabular">
+								<span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
 								Self-use: {+(energyToday * 0.53).toFixed(1)} kWh
 							</span>
-							<span className="flex items-center gap-1 text-blue-700 font-semibold">
-								<span className="w-2 h-2 rounded-full bg-blue-500"></span>
+							<span className="flex items-center gap-1.5 text-blue-700 font-semibold font-tabular">
+								<span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
 								Grid: {+(energyToday * 0.47).toFixed(1)} kWh
 							</span>
 						</div>
-					</div>
+					</Card>
 
 					{/* KPI 2: Production vs Expected */}
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
-						<div className="text-xs text-slate-500 font-medium">Production vs Expected</div>
-						<div className="flex items-baseline gap-2 mt-2">
-							<span className={`text-3xl font-extrabold tracking-tight ${
-								isOutage ? "text-rose-600" : isPendingHardware ? "text-slate-600" : "text-emerald-600"
+					<Card padding="default">
+						<div className="flex items-center justify-between mb-1">
+							<span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+								Production vs Expected
+							</span>
+							<Badge variant={diffToday >= 0 ? "healthy" : "warning"}>
+								{diffToday >= 0 ? "On Target" : "Variance"}
+							</Badge>
+						</div>
+						<div className="flex items-baseline gap-2 my-1">
+							<span className={`text-3xl font-black font-tabular ${
+								isOutage ? "text-rose-600" : isPendingHardware ? "text-slate-600" : diffToday >= 0 ? "text-emerald-600" : "text-amber-600"
 							}`}>
 								{diffPercent}
 							</span>
-							<span className="text-xs font-semibold text-slate-400">
-								{isPendingHardware
-									? "(Awaiting Telemetry)"
-									: `(${diffToday >= 0 ? "+" : ""}${diffToday} kWh)`}
+							<span className="text-xs font-semibold text-slate-500 font-tabular">
+								{isPendingHardware ? "(Awaiting)" : `(${diffToday >= 0 ? "+" : ""}${diffToday} kWh)`}
 							</span>
 						</div>
-						<div className="text-[11px] text-slate-500 mt-2.5 leading-snug">
+						<p className="text-xs text-slate-500 mt-2 leading-relaxed">
 							{isOutage
 								? "MPPT lockout detected. Inverter output zeroed out."
 								: isPendingHardware
-								? "Inverter serial set to PENDING_INVERTER_ID. Production tracking begins upon hardware link."
-								: "System is producing at 100% optimum capacity under today's weather conditions."}
-						</div>
-					</div>
+								? "Inverter pending link. Tracking begins upon hardware connection."
+								: "Operating within normal variance relative to today's solar irradiance."}
+						</p>
+					</Card>
 
 					{/* KPI 3: Electricity Bill Savings */}
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
-						<div className="text-xs text-slate-500 font-medium">Electricity Bill Savings</div>
-						<div className="flex items-baseline gap-1 mt-2">
-							<span className="text-3xl font-extrabold text-emerald-600 tracking-tight">₹{billSavingsToday}</span>
+					<Card padding="default">
+						<div className="flex items-center justify-between mb-1">
+							<span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+								Electricity Savings
+							</span>
+							<Badge variant="healthy">₹7.50 / kWh</Badge>
+						</div>
+						<div className="flex items-baseline gap-1 my-1">
+							<span className="text-3xl font-black text-emerald-600 font-tabular">₹{billSavingsToday}</span>
 							<span className="text-xs font-semibold text-slate-500">today</span>
 						</div>
-						<div className="text-[11px] text-slate-500 mt-2.5 leading-snug">
-							Calculated using standard local net metering tariff of ₹7.50 / kWh.
-						</div>
-					</div>
+						<p className="text-xs text-slate-500 mt-2 leading-relaxed">
+							Calculated using standard local net metering tariff rate.
+						</p>
+					</Card>
 
 					{/* KPI 4: System Health */}
-					<div className="bg-white border border-slate-200/90 rounded-lg p-4 shadow-xs">
-						<div className="text-xs text-slate-500 font-medium">System Health</div>
-						<div className="flex items-center gap-2 mt-2">
+					<Card padding="default">
+						<div className="flex items-center justify-between mb-1">
+							<span className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+								System Health
+							</span>
+							<Badge variant={isOutage ? "critical" : "healthy"} dot>
+								{isOutage ? "Critical" : "Nominal"}
+							</Badge>
+						</div>
+						<div className="flex items-center gap-2 my-1">
 							{isOutage ? (
-								<span className="w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xs">!</span>
+								<span className="w-5 h-5 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xs">!</span>
 							) : (
-								<CheckCircle2 className="w-6 h-6 text-emerald-600 stroke-[2.5]" />
+								<CheckCircle2 className="w-5 h-5 text-emerald-600 stroke-[2.5]" />
 							)}
-							<span className={`text-base font-bold ${isOutage ? "text-rose-700" : isPendingHardware ? "Ready for Inverter Link" : "Normal Operation"}`}>
-								{isOutage ? "System Outage" : isPendingHardware ? "Ready for Inverter Link" : "Normal Operation"}
+							<span className={`text-base font-bold ${isOutage ? "text-rose-700" : "text-slate-900"}`}>
+								{isOutage ? "System Outage" : isPendingHardware ? "Ready for Link" : "Normal Operation"}
 							</span>
 						</div>
-						<div className="text-[11px] text-slate-500 mt-2.5 leading-snug">
-							{cap} kWp Rated Array • {site?.numberOfPanels || 14} Panels Configured
-						</div>
-					</div>
+						<p className="text-xs text-slate-500 mt-2 leading-relaxed">
+							{cap} kWp Array • {site?.numberOfPanels || 14} Panels Configured
+						</p>
+					</Card>
 				</div>
 
 				{/* 3-Column Dashboard Layout */}
