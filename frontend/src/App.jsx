@@ -1,15 +1,23 @@
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./context/AuthContext.jsx";
-import OverviewPage from "./pages/OverviewPage";
-import EnergyPage from "./pages/EnergyPage";
-import SolarSystemPage from "./pages/SolarSystemPage";
-import InstallationsPage from "./pages/InstallationsPage";
-import AlertsPage from "./pages/AlertsPage";
-import SavingsPage from "./pages/SavingsPage";
-import ReportsPage from "./pages/ReportsPage";
-import RegisterPage from "./pages/RegisterPage";
-import LoginPage from "./pages/LoginPage";
-import SettingsPage from "./pages/SettingsPage";
+
+const OverviewPage = lazy(() => import("./pages/OverviewPage"));
+const EnergyPage = lazy(() => import("./pages/EnergyPage"));
+const SolarSystemPage = lazy(() => import("./pages/SolarSystemPage"));
+const InstallationsPage = lazy(() => import("./pages/InstallationsPage"));
+const AlertsPage = lazy(() => import("./pages/AlertsPage"));
+const SavingsPage = lazy(() => import("./pages/SavingsPage"));
+const ReportsPage = lazy(() => import("./pages/ReportsPage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const SettingsPage = lazy(() => import("./pages/SettingsPage"));
+
+const PageFallback = () => (
+	<div className="min-h-[60vh] flex items-center justify-center bg-[#F4F7FB]">
+		<div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+	</div>
+);
 
 const ProtectedRoute = ({ children, requireAdmin = false }) => {
 	const { isAuthenticated, isAdmin, loading } = useAuth();
@@ -42,7 +50,8 @@ const PublicOnlyRoute = ({ children }) => {
 
 const App = () => {
 	return (
-		<Routes>
+		<Suspense fallback={<PageFallback />}>
+			<Routes>
 			{/* Public Authentication & Registration Routes */}
 			<Route
 				path="/login"
@@ -206,6 +215,7 @@ const App = () => {
 			{/* Catch-all Fallback */}
 			<Route path="*" element={<Navigate to="/" replace />} />
 		</Routes>
+	</Suspense>
 	);
 };
 
