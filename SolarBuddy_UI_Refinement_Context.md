@@ -111,14 +111,15 @@ Protected frontend files:
   - [x] Identified root causes of prior session failures (PowerShell syntax + sandbox `.git` access)
   - [x] Created `SolarBuddy_UI_Refinement_Context.md` and `SOLARBUDDY_HANDOFF.md` in repository root
 
-- [ ] **Phase 1: Solis Recovery & Completion**
+- [x] **Phase 1: Solis Recovery & Completion**
   - [x] Solis logo verified at `frontend/public/solis-logo.png` (1024x1024 PNG)
   - [x] Backend system prompt rewritten for Solis identity, response modes, and operational rules
   - [x] Local fallback engine updated in `modelProvider.js`
   - [x] Frontend widget rebranded to Solis with logo mark, context panel, and collapsible sources
-  - [ ] Complete Solis multi-role authorization verification (customer own site, customer cross-site, admin any site, unauthenticated)
-  - [ ] Verify all 3 response styles (Quick Answer, Performance Investigation, Technical Explanation)
-  - [ ] Commit Phase 1
+  - [x] Complete Solis multi-role authorization verification (customer own site, customer cross-site, admin any site, unauthenticated)
+  - [x] Verify all 3 response styles (Quick Answer, Performance Investigation, Technical Explanation)
+  - [x] 12 of 12 tests passed in `test_solis_suite.js`
+  - [x] Commit Phase 1
 
 - [ ] **Phase 2: Branding Consistency**
   - [ ] Global audit & replacement of `SolarWizer` and `SolarWiser` &rarr; `SolarBuddy`

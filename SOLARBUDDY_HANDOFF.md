@@ -2,8 +2,8 @@
 
 > **Role:** Single source of truth for engineering state, checkpointing, and agent continuation.  
 > **Repository:** `D:\webdev\project\minor project\Solar Budyy`  
-> **Current Phase:** Phase 0 (Baseline & Recovery) — **COMPLETED** | Next: Phase 1 (Solis Recovery & Completion)  
-> **Branch:** `main` | **HEAD:** `f2631a0` (*Harden auth and rebrand AI assistant to Solis*)  
+> **Current Phase:** Phase 1 (Solis Recovery & Completion) — **COMPLETED** | Next: Phase 2 (Branding Consistency)  
+> **Branch:** `main` | **HEAD:** `00a7df8` (*Phase 0: baseline report, recovery audit, and handoff documentation*)  
 > **Rollback Points:**  
 > - Branch: `rollback-phase0-baseline` (`d8ddae7`)  
 > - Tag: `phase0-solis-initial` (`f2631a0`)  
@@ -94,6 +94,19 @@ All commands executed and outputs verified:
 - **Status:** File verified, committed in `f2631a0`
 - **Dimensions:** 1024x1024 px PNG, 457,927 bytes, magic `89504e470d0a1a0a`
 
+### F. Solis AI Assistant Test Suite
+- **Command:** `node backend/scripts/test_solis_suite.js`
+- **Result:** **PASSED (12 of 12 tests passed)**
+  - Unauthenticated access returns HTTP 401: **PASS**
+  - Customer on own site returns HTTP 200: **PASS**
+  - Customer querying foreign site is locked to own site (tenant isolation): **PASS**
+  - Admin querying fleet site returns HTTP 200: **PASS**
+  - Quick Answer style returns real telemetry: **PASS**
+  - Performance Investigation style covers variance & conditions: **PASS**
+  - Technical Explanation style grounds in photovoltaic knowledge: **PASS**
+  - RAG retrieves matching passages: **PASS**
+  - All 6 backend tools defined and schema-compliant: **PASS**
+
 ---
 
 ## 4. Current State & Checkpoint Log
@@ -103,19 +116,15 @@ All commands executed and outputs verified:
 | 2026-11-02 18:39 | Security & Bug Fixes | `auth.controller.js`, `auth.js`, `demo.route.js`, `app.js`, `LoginPage.jsx`, `TopNav.jsx` | Fixed UserData crash, removed password bypasses, secured demo route, hardened CORS | Working |
 | 2026-11-02 18:52 | Solis Implementation | `systemPrompt.js`, `modelProvider.js`, `SolarBuddyAIChatWidget.jsx`, `solis-logo.png` | Rebranded AI to Solis, updated prompt, welcome screen, context panel, source details | Committed in `f2631a0` |
 | 2026-11-02 19:23 | Phase 0 Baseline Complete | `SolarBuddy_UI_Refinement_Context.md`, `SOLARBUDDY_HANDOFF.md` | Full recovery audit, baseline tests logged, rollback points established | **Phase 0 ACCEPTED** |
+| 2026-11-02 19:27 | Phase 1 Solis Verified | `test_solis_suite.js`, `SOLARBUDDY_HANDOFF.md`, `SolarBuddy_UI_Refinement_Context.md` | 12/12 Solis authorization, response styles, and tool tests passed | **Phase 1 ACCEPTED** |
 
 ---
 
-## 5. Exact Next Step: Phase 1 — Solis Recovery & Completion
+## 5. Exact Next Step: Phase 2 — Branding Consistency
 
-1. Run an end-to-end authorization test specifically for Solis AI chat:
-   - Customer on their own site (Allowed &rarr; HTTP 200)
-   - Customer trying to query another customer's site (Blocked &rarr; HTTP 403 / restricted to own site)
-   - Admin querying any site (Allowed &rarr; HTTP 200)
-   - Unauthenticated chat request (Blocked &rarr; HTTP 401)
-2. Verify all three Solis response styles:
-   - **Quick Answer**
-   - **Performance Investigation**
-   - **Technical Explanation**
-3. Verify tool execution and local fallback engine response.
-4. Stage and commit Phase 1.
+1. Perform repository-wide audit for `SolarWizer` and `SolarWiser` across backend and frontend.
+2. Standardize all occurrences to `SolarBuddy` (especially in emails, Excel export headers, and CSS comments).
+3. Audit and rename `--sw-*` CSS custom properties to `--sb-*` across `index.css` and all JSX references (verifying with grep: zero `--sw-` remaining).
+4. Remove prefilled registration credentials from form defaults (`RegisterPage.jsx`).
+5. Replace emoji icons (🚨, ☀️, 📍, ⚡) with Lucide React icons.
+6. Verify production build passes and commit Phase 2.
